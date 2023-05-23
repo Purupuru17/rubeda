@@ -1,0 +1,8 @@
+User-agent: *
+Disallow: /system/
+Disallow: /vendor/
+Disallow: /app/backend/
+Disallow: /app/frontend/
+
+
+

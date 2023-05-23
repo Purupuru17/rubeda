@@ -1,0 +1,17 @@
+{
+    "name": "RUANG BELAJAR DESA",
+    "short_name": "RUBEDA",
+    "description": "Aplikasi Ruang Belajar Desa",
+    "lang": "id-ID",
+    "start_url": "/",
+    "display": "standalone",
+    "theme_color": "#438eb9",
+    "background_color": "#438eb9",
+    "icons": [
+        {
+            "src": "app/img/logo.png",
+            "sizes": "280x280",
+            "type": "image/png"
+        }
+    ]
+}
