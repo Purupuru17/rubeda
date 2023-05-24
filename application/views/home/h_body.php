@@ -1,6 +1,4 @@
-<?php 
-defined('BASEPATH') OR exit('No direct script access allowed'); 
-?>
+<?php defined('BASEPATH') OR exit('No direct script access allowed'); ?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -71,8 +69,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
         <?php
         load_css(array(
-            "backend/puru.css",
-            
             "frontend/vidoe/vendor/bootstrap/css/bootstrap.min.css",
             "frontend/vidoe/vendor/fontawesome-free/css/all.min.css",
             "frontend/vidoe/css/osahan.css",
@@ -133,7 +129,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             </ul>
             
             <div id="content-wrapper">
-                
+               
                 <?= $content ?>
                 
                 <?php $this->load->view('home/h_footer'); ?>
@@ -148,7 +144,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         
         <?php
         load_js(array(
-            "backend/assets/js/lazy/lazysizes.min.js",
             "frontend/vidoe/vendor/bootstrap/js/bootstrap.bundle.min.js",
             "frontend/vidoe/vendor/jquery-easing/jquery.easing.min.js",
             "frontend/vidoe/vendor/owl-carousel/owl.carousel.js",
@@ -159,6 +154,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <script src="https://cdnjs.cloudflare.com/ajax/libs/UpUp/1.0.0/upup.min.js"></script>
         <script async type="text/javascript">
             $(document).ready(function() {
+                $("body").on("contextmenu", function (e) {
+                    //return false;
+                });
                 const filesToCache = [
                     "app/backend/puru.css",
                     "app/backend/assets/fonts/poppins/font.css?family=Poppins:300,400,500,600,700",

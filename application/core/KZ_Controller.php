@@ -9,11 +9,7 @@ class KZ_Controller extends CI_Controller {
     public $sessionlevel = null;
     public $sessionfoto = null;
     
-    public $smtid = null;
-    public $smtname = null;
-    public $mid = null;
-    public $pid = null;
-    public $did = null;
+    public $cid = null;
             
     function __construct() {
         parent::__construct();
@@ -45,21 +41,13 @@ class KZ_Controller extends CI_Controller {
             $role = $this->m_group->getRole(array('r.user_id' => $this->sessionid));
             $this->session->set_userdata(array('role' => 1, 'group_role' => $role));
         }
-//        if(empty($this->session->userdata('idsmt'))){
-//            $smt = $this->m_semester->getBy(array('periode_skg' => '1'));
-//            if(!is_null($smt)){
-//                $this->session->set_userdata(array('idsmt' => $smt['id_semester'], 'namasmt' => $smt['nama_semester']));
-//            }
-//        }
-//        $this->smtid = $this->session->userdata('idsmt');
-//        $this->smtname = $this->session->userdata('namasmt');
     }
     //auth
     function _authentication() {
         $this->load->model(array('m_authentication','m_user'));
         
-        $module_non_login = array('error_404','error_module','non_login','login','home','video','channel','galeri');
-        $module_login = array('beranda','logout');
+        $module_non_login = array('error_404','error_module','non_login','login','home');
+        $module_login = array('beranda','logout','video');
 
         $module = ($this->uri->segment(1) == '' ? 'home' : $this->uri->segment(1));
         $class = ($this->uri->segment(2) == '' ? 'home' : $this->uri->segment(2));
@@ -195,7 +183,7 @@ class KZ_Controller extends CI_Controller {
         $this->output->set_header("Pragma: no-cache");
     }
     //tmp id
-    function _mhs_id() {
+    function _creator_id() {
         $this->load->model(array('m_mhs'));
         
         if(empty($this->session->userdata('mid'))){
@@ -205,27 +193,5 @@ class KZ_Controller extends CI_Controller {
             }
         }
         $this->mid = $this->session->userdata('mid');
-    }
-    function _prodi_id() {
-        $this->load->model(array('m_prodi'));
-        
-        if(empty($this->session->userdata('pid'))){
-            $rs = $this->m_prodi->getTmp(array('user_id' => $this->sessionid));
-            if(!is_null($rs)){
-                $this->session->set_userdata(array('pid' => $rs['prodi_id']));
-            }
-        }
-        $this->pid = $this->session->userdata('pid');
-    }
-    function _dosen_id() {
-        $this->load->model(array('m_dosen'));
-        
-        if(empty($this->session->userdata('did'))){
-            $rs = $this->m_dosen->getTmp(array('user_id' => $this->sessionid));
-            if(!is_null($rs)){
-                $this->session->set_userdata(array('did' => $rs['dosen_id']));
-            }
-        }
-        $this->did = $this->session->userdata('did');
     }
 }

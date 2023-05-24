@@ -2,41 +2,49 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="main-title">
-                <h6>Upload Details</h6>
+                <h6>Unggah Video</h6>
             </div>
         </div>
         <div class="col-lg-2">
-            <div class="imgplace"></div>
+            <div id="uploaded-file" class="imgplace"></div>
         </div>
         <div class="col-lg-10">
-            <div class="osahan-title">Contrary to popular belief, Lorem Ipsum (2020) is not.</div>
+            <div class="osahan-title"></div>
             <div class="osahan-size">102.6 MB . 2:13 MIN Remaining</div>
             <div class="osahan-progress">
-                <div class="progress">
-                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 75%"></div>
+                <div class="progress" style="height: 24px">
+                    <div id="file-progress-bar" class="progress-bar progress-bar-success progress-bar-striped progress-bar-animated" role="progressbar"></div>
                 </div>
                 <div class="osahan-close">
                     <a href="#"><i class="fas fa-times-circle"></i></a>
                 </div>
             </div>
-            <div class="osahan-desc">Your Video is still uploading, please keep this page open until it's done.</div>
+            <div id="msg-txt" class="osahan-desc" style="font-size: 14px"></div>
         </div>
     </div>
     <hr>
     <div class="row">
         <div class="col-lg-12">
+            <form id="upload-form" method="POST" enctype="multipart/form-data">
             <div class="osahan-form">
+                <span id="msg-check"></span>
                 <div class="row">
-                    <div class="col-lg-12">
+                    <div class="col-sm-6 col-xs-12">
                         <div class="form-group">
-                            <label for="e1">Video Title</label>
-                            <input type="text" placeholder="Contrary to popular belief, Lorem Ipsum (2020) is not." id="e1" class="form-control">
+                            <label>Pilih File</label>
+                            <input type="file" name="file" id="file" class="form-control">
                         </div>
                     </div>
                     <div class="col-lg-12">
                         <div class="form-group">
-                            <label for="e2">About</label>
-                            <textarea rows="3" id="e2" name="e2" class="form-control">Description</textarea>
+                            <label>Judul</label>
+                            <input type="text" name="judul" placeholder="Judul Video (Buat Semenarik Mungkin)" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label>Deskripsi</label>
+                            <textarea rows="3" name="deskripsi" placeholder="Deskripsi Terkait Video" class="form-control"></textarea>
                         </div>
                     </div>
                 </div>
@@ -265,13 +273,78 @@
                 </div>
             </div>
             <div class="osahan-area text-center mt-3">
-                <button class="btn btn-outline-primary">Save Changes</button>
+                <button id="btn-submit" class="btn btn-outline-primary" type="submit">Simpan</button>
             </div>
             <hr>
             <div class="terms text-center">
                 <p class="mb-0">There are many variations of passages of Lorem Ipsum available, but the majority <a href="#">Terms of Service</a> and <a href="#">Community Guidelines</a>.</p>
                 <p class="hidden-xs mb-0">Ipsum is therefore always free from repetition, injected humour, or non</p>
             </div>
+            </form>
         </div>
     </div>
 </div>
+<script type="text/javascript">
+    const module = "<?= site_url($module) ?>";  
+    $(function () {
+        
+    });
+    $("#judul").keyup(function () {
+        $(".osahan-title").html(this.value);
+    });
+    $(document).on('submit', '#upload-form', function(e){
+        $("#msg-check").html('');
+        e.preventDefault();
+        $.ajax({
+            xhr: function() {
+                var xhr = new window.XMLHttpRequest();         
+                xhr.upload.addEventListener("progress", function(element) {
+                    console.log(element);
+                    if (element.lengthComputable) {
+                        var percentComplete = ((element.loaded / element.total) * 100);
+                        $("#file-progress-bar").width(percentComplete + '%');
+                        $("#file-progress-bar").html(percentComplete + '%');
+                    }
+                }, false);
+                return xhr;
+            },
+            type: 'POST',
+            url: module + "/ajax/type/action/source/upload",
+            data: new FormData(this),
+            processData: false,
+            contentType: false,
+            cache: false,
+            dataType: 'json',
+            beforeSend: function(){
+                $("#file-progress-bar").width('0%');
+                $("#msg-txt").html('<div class="text-info">Sedang mengupload video. Mohon tetap di halaman ini hingga proses upload selesai!</div>');
+            },
+            success: function(rs){
+                if(rs.status){
+                    $("#upload-form")[0].reset();
+                    $("#btn-submit").hide();
+                    $(".osahan-title").html('');
+                    $("#msg-txt").html('<div class="text-success">'+rs.msg+'</div>');
+                    $("#uploaded-file").html('<video width="100%" height="94" controls><source src="'+rs.data+'"></video>');
+                }else{
+                    $("#msg-txt").html('<div class="text-danger">'+rs.msg+'</div>');
+                }
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                console.log(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+            }
+        });
+    });
+    $("#file").change(function(){
+        var allowedTypes = ['video/mp4','video/mkv','video/avi'];
+        var file = this.files[0];
+        var fileType = file.type;
+        if(!allowedTypes.includes(fileType)) {
+            $("#msg-check").html('<small class="text-danger">Pilih format video yang sesuai (MP4, MKV, AVI)</small>');
+            $("#file").val('');
+            return false;
+        } else {
+            $("#msg-check").html('');
+        }
+    });
+</script>

@@ -4,7 +4,11 @@
             <div class="col-md-8">
                 <div class="single-video-left">
                     <div class="single-video">
-                        <iframe width="100%" height="315" src="https://www.youtube-nocookie.com/embed/8LWZSGNjuF0?rel=0&amp;controls=0&amp;showinfo=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                        <!--<iframe width="100%" height="315" src="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>-->
+                        <video width="100%" height="315" controls>
+                            <source src="<?= base_url('app/upload/video/seven.mp4') ?>" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
                     </div>
                     <div class="single-video-title box mb-3">
                         <h2><a href="#">Contrary to popular belief, Lorem Ipsum (2020) is not.</a></h2>

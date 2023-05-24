@@ -14,6 +14,7 @@
             </div>
         </div>
     </div>
+    <?= $this->session->flashdata('notif'); ?>
     <div class="top-category section-padding mb-4">
         <div class="row">
             <div class="col-md-12">
@@ -98,22 +99,21 @@
             url: module + "/ajax/type/list/source/topic",
             type: "POST",
             dataType: "json",
-            data: { sort: sort },
+            data: { sort: sort, key: $("#q-search").val() },
             success: function (rs) {
+                $(".topik-item").remove();
                 if(rs.status) {
                     let content = '';
                     $.each(rs.data, function (index, value) {
-                        content = '<div class="item"><div class="category-item">' +
+                        content = '<div class="item topik-item"><div class="category-item">' +
                             '<a href="'+ value.link +'">' +
                             '<img class="img-fluid" src="'+ value.image +'">' +
                             '<h6>'+ value.judul +'</h6><p>'+ value.video +' Video</p>' +
                         '</a></div></div>';
                         $("#topik-item").owlCarousel().trigger('add.owl.carousel', [$(content)]).trigger('refresh.owl.carousel');
                     });
-                }else{
-                    $("#topik-item").html('');
-                    console.log(rs.msg);
                 }
+                console.log(rs.msg);
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 console.log('Failed fetch data from server');
@@ -125,15 +125,13 @@
             url: module + "/ajax/type/list/source/video",
             type: "POST",
             dataType: "json",
-            data: { sort: sort },
+            data: { sort: sort, key: $("#q-search").val() },
             success: function (rs) {
+                $(".video-item").remove();
                 if(rs.status) {
-                    $("#video-item").next().remove();
                     $(rs.data).insertAfter("#video-item");
-                }else{
-                    $("#video-item").next().remove();
-                    console.log(rs.msg);
                 }
+                console.log(rs.msg);
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 console.log('Failed fetch data from server');
@@ -145,15 +143,13 @@
             url: module + "/ajax/type/list/source/channel",
             type: "POST",
             dataType: "json",
-            data: { sort: sort },
+            data: { sort: sort, key: $("#q-search").val() },
             success: function (rs) {
+                $(".channel-item").remove();
                 if(rs.status) {
-                    $("#channel-item").next().remove();
                     $(rs.data).insertAfter("#channel-item");
-                }else{
-                    $("#channel-item").next().remove();
-                    console.log(rs.msg);
                 }
+                console.log(rs.msg);
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 console.log('Failed fetch data from server');

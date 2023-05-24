@@ -212,6 +212,16 @@ if (!function_exists('load_array')) {
     function load_array($type) {
         $val = array();
         switch ($type) {
+            case 'kerja':
+                $val = array(
+                    'PNS','TANI','WIRASWASTA','PELAJAR','POLISI','TNI','KARYAWAN'
+                );
+                break;
+            case 'lokasi':
+                $val = array(
+                    'MAJARAN','MAJENER','AIMAS'
+                );
+                break;
             case 'st_mhs':
                 $val = array(
                     'AKTIF','LULUS','LAINNYA','MUTASI',
