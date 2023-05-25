@@ -75,8 +75,6 @@
             "frontend/vidoe/vendor/owl-carousel/owl.carousel.css",
             "frontend/vidoe/vendor/owl-carousel/owl.theme.css"
         ));
-        ?>
-        <?php
         load_js(array(
             "frontend/vidoe/vendor/jquery/jquery.min.js",
         ));

@@ -173,7 +173,7 @@ class Home extends KZ_Controller {
         $this->db->join('m_topik t', 'v.topik_id = t.id_topik', 'inner');
         $this->db->join('fk_like l', 'l.video_id = v.id_video', 'left');
         $this->db->join('fk_riwayat r', 'r.video_id = v.id_video', 'left');
-        $this->db->where('v.status_video','1');
+        $this->db->where(array('v.status_video' => '1', 'v.privasi_video' => '1'));
         if(!empty($key)){
             $this->db->like('v.judul_video', trim($key), 'both');
         }
