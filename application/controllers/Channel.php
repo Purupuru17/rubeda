@@ -8,10 +8,7 @@ class Channel extends KZ_Controller {
     function __construct() {
         parent::__construct();
     }
-    function index($url = null) {
-        if(!empty($url)){
-            $this->_detail($url);
-        }
+    function index() {
         $this->data['module'] = $this->module;
         $this->load_home('home/channel/h_index', $this->data);
     }
@@ -20,7 +17,7 @@ class Channel extends KZ_Controller {
         
         $this->load_home('home/channel/h_subscribe', $this->data);
     }
-    function _detail($url) {
+    function detail($url = null) {
         $this->data['module'] = $this->module;
         $this->load_home('home/channel/h_detail', $this->data);
     }

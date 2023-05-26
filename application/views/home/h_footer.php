@@ -4,7 +4,8 @@
         <div class="row no-gutters">
             <div class="col-lg-6 col-sm-6">
                 <p class="mt-1 mb-0">&copy; Copyright 2023 <strong class="text-dark"><?= $app['judul'] ?></strong>. <br>
-                    <small class="mt-0 mb-0"><small>{elapsed_time} detik ~ {memory_usage}</small> by <a class="text-primary" target="_blank" href="#">UNIMUDA Sorong</a>
+                    <small class="mt-0 mb-0"><small>{elapsed_time} detik ~ {memory_usage}</small> by 
+                        <a class="text-primary" target="_blank" href="#"><?= $app['cipta'] ?></a>
                     </small>
                 </p>
             </div>

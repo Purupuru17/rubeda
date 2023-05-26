@@ -51,14 +51,18 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 */
 $route['default_controller'] = 'home';
 
-$route['login'] = "non_login/login";
+$route['login'] = "home/login";
 $route['logout'] = "non_login/login/logout";
 $route['beranda'] = "non_login/beranda";
 
-//$route['video/(:any)'] = "video/index/$1";
+$route['video/(:any)'] = "video/index/$1";
 $route['unggah'] = "video/unggah";
 $route['riwayat'] = "video/riwayat";
-$route['channel/(:any)'] = "channel/index/$1";
+$route['topik'] = "video/topik";
+$route['topik/(:any)'] = "video/topik_detail/$1";
+
+$route['channel/(:any)'] = "channel/detail/$1";
+$route['subscribe'] = "channel/subscribe";
 
 $route['error_404'] = "home/err_404";
 $route['error_module'] = "home/err_module";

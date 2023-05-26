@@ -6,10 +6,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <!-- #section:basics/footer -->
         <div class="footer-content">
             <span class="">
-                <span class="blue"><?= $app['cipta'] ?> &copy; 2022</span>
+                <span class="blue"><?= $app['cipta'] ?> &copy; 2023</span>
                 <small class="grey">{elapsed_time} detik ~ {memory_usage}</small>
             </span>
-            
         </div>
         <!-- /section:basics/footer -->
     </div>

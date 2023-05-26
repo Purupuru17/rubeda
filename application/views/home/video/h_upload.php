@@ -117,6 +117,7 @@ load_js(array(
     $("#upload-form").submit(function(e) {
         e.preventDefault();
         $("#msg-check").html('');
+        $("#btn-submit").hide();
         $(this).ajaxSubmit({
             url: module + "/ajax/type/action/source/upload",
             target: '#uploaded-file',
@@ -132,16 +133,17 @@ load_js(array(
             success: function(rs){
                 if(rs.status){
                     $("#upload-form")[0].reset();
-                    $("#btn-submit").hide();
                     $(".osahan-title, .osahan-size").html('');
-                    $(".osahan-desc").html('<div class="text-success">'+rs.msg+'</div>');
+                    $(".osahan-desc").html('<div class="text-success">'+rs.msg+' Mohon tunggu halaman akan dimuat ulang.</div>');
                     $("#uploaded-file").html('<video width="100%" height="94" controls><source src="'+rs.data+'"></video>');
-                    setTimeout(function() {location.reload();}, 5000);
+                    setTimeout(function() {location.reload();}, 3000);
                 }else{
+                    $("#btn-submit").show();
                     $(".osahan-desc").html('<div class="text-danger">'+rs.msg+'</div>');
                 }
             },
             error: function (response, status, e) {
+                $("#btn-submit").show();
                 $(".osahan-desc").html('<div class="text-danger">'+response+'</div>');
             }
         });

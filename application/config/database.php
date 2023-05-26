@@ -79,9 +79,9 @@ $pass_default = '';
 
 switch(ENVIRONMENT) {
     case 0 :
-        $dsn_default = 'mysql:host=localhost;dbname=siakad_db';
-        $user_default= 'pusdatin';
-        $pass_default= 'Firman2412!';
+        $dsn_default = 'mysql:host=localhost;dbname=u1076483_rubeda';
+        $user_default= 'u1076483_pusdatin';
+        $pass_default= 'BCI+k=NCsYDM';
         break;
     case 1 :
         $dsn_default = 'mysql:host=localhost;dbname=rubeda_db';

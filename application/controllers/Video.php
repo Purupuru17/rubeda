@@ -8,12 +8,34 @@ class Video extends KZ_Controller {
     
     function __construct() {
         parent::__construct();
+        
+        $this->_creator_id();
     }
     function index($url = null) {
+         if(empty($url)){
+            redirect();
+        }
+        $detail = $this->db->from('m_video v')->join('m_creator c', 'v.creator_id = c.id_creator', 'inner')
+                ->join('m_topik t', 'v.topik_id = t.id_topik', 'inner')
+                ->where(array('v.slug_video' => $url, 'v.status_video' => '1', 'v.privasi_video !=' => '0'))->get()->row_array();
+        if(empty($detail)){
+            $this->session->set_flashdata('notif', notif('warning', 'Peringatan', 'Video tidak tersedia untuk saat ini'));
+            redirect();
+        }
+        $this->data['detail'] = $detail;
         $this->data['module'] = $this->module;
         $this->load_home('home/video/h_index', $this->data);
     }
     function unggah() {
+        if(empty($this->cid)){
+            redirect();
+        }
+        $rs = $this->db->get_where('m_creator', array('id_creator' => $this->cid))->row_array();
+        if($rs['status_creator'] == '0'){
+            $this->session->set_flashdata('notif', notif('warning', 'Peringatan', 
+            'Anda belum di izinkan untuk dapat mengunggah Video. Hubungi administrator dahulu'));
+            redirect();
+        }
         $this->data['topik'] = $this->db->get('m_topik')->result_array();
         
         $this->data['module'] = $this->module;
@@ -21,19 +43,15 @@ class Video extends KZ_Controller {
     }
     function riwayat() {
         $this->data['module'] = $this->module;
-        
         $this->load_home('home/video/h_riwayat', $this->data);
     }
-    function topik($url = null) {
-        if(!empty($url)){
-            $this->_detail($url);
-        }
+    function topik() {
         $this->data['module'] = $this->module;
         $this->load_home('home/video/h_topik', $this->data);
     }
-    function _detail($url) {
+    function topik_detail($url = null) {
         $this->data['module'] = $this->module;
-        $this->load_home('home/video/h_topik_detail', $this->data);
+        $this->load_home('home/video/h_topik', $this->data);
     }
     function ajax() {
         $routing_module = $this->uri->uri_to_assoc(3, $this->url_route);
@@ -67,7 +85,7 @@ class Video extends KZ_Controller {
         $data['deskripsi_video'] = $this->input->post('deskripsi');
         
         $data['slug_video'] = url_title($data['judul_video'], 'dash', true);
-        $data['creator_id'] = $this->sessionid;
+        $data['creator_id'] = $this->cid;
         $data['status_video'] = '0';
         $data['create_video'] = date('Y-m-d H:i:s');
         $data['log_video'] = $this->sessionname.' menambahkan video baru';

@@ -54,7 +54,7 @@
  * NOTE: If you change these, also change the error_reporting() code below
  */
 $define = define('ENVIRONMENT', isset($_SERVER['CI_ENV']) ? $_SERVER['CI_ENV'] : 1);
-define('SW_VERSION', 'v1' );
+define('SW_VERSION', 'v1.0' );
 /*
  *---------------------------------------------------------------
  * ERROR REPORTING

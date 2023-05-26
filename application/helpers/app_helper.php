@@ -36,7 +36,7 @@ if (!function_exists('load_js')) {
 if (!function_exists('load_file')) {
 
     function load_file($src, $img = NULL) {
-        $null_ava_img = !is_null($img) ? 'app/img/no-avatar.png' : 'app/img/no-img.jpg';
+        $null_ava_img = !is_null($img) ? 'app/img/no-avatar.png' : 'app/img/logo.png';
         if(empty($src)){
             return base_url($null_ava_img);
         }

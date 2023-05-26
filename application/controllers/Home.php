@@ -158,7 +158,7 @@ class Home extends KZ_Controller {
             $row['judul'] = $item['judul_topik'];
             $row['image'] = load_file($item['img_topik']);
             $row['video'] = $item['video'];
-            $row['link'] = site_url('video/topik/'.encode($item['id_topik']));
+            $row['link'] = site_url('topik/'.encode($item['id_topik']));
             
             $data[] = $row;
         }

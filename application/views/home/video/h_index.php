@@ -4,37 +4,46 @@
             <div class="col-md-8">
                 <div class="single-video-left">
                     <div class="single-video">
-                        <!--<iframe width="100%" height="315" src="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>-->
                         <video width="100%" height="315" controls>
-                            <source src="<?= base_url('app/upload/video/seven.mp4') ?>" type="video/mp4">
+                            <source src="<?= base_url($detail['file_video']) ?>" type="video/mp4">
                             Your browser does not support the video tag.
                         </video>
                     </div>
                     <div class="single-video-title box mb-3">
-                        <h2><a href="#">Contrary to popular belief, Lorem Ipsum (2020) is not.</a></h2>
-                        <p class="mb-0"><i class="fas fa-eye"></i> 2,729,347 views</p>
+                        <h2><?= ctk($detail['judul_video']) ?></h2>
+                        <p class="mb-0"><i class="fas fa-eye"></i> ? views</p>
                     </div>
                     <div class="single-video-author box mb-3">
-                        <div class="float-right"><button class="btn btn-danger" type="button">Subscribe <strong>1.4M</strong></button> <button class="btn btn btn-outline-danger" type="button"><i class="fas fa-bell"></i></button></div>
-                        <img class="img-fluid" src="img/s4.png" alt>
-                        <p><a href="#"><strong>Osahan Channel</strong></a> <span title data-placement="top" data-toggle="tooltip" data-original-title="Verified"><i class="fas fa-check-circle text-success"></i></span></p>
-                        <small>Published on Aug 10, 2020</small>
+                        <div class="float-right">
+                            <button class="btn btn-danger" type="button">Subscribe <strong>1.4M</strong></button> 
+                            <button class="btn btn btn-outline-danger" type="button"><i class="fa fa-thumbs-up"></i></button>
+                        </div>
+                        <img class="img-fluid" src="<?= load_file($detail['img_creator']) ?>" alt>
+                        <p><a href="<?= site_url('channel/'.$detail['slug_creator']) ?>"><strong><?= $detail['nama_creator'] ?></strong></a> 
+                            <span title data-placement="top" data-toggle="tooltip" data-original-title="Verified">
+                                <i class="fas fa-check-circle text-success"></i>
+                            </span>
+                        </p>
+                        <small>Upload pada <?= selisih_wkt($detail['create_video']) ?></small>
                     </div>
                     <div class="single-video-info-content box mb-3">
-                        <h6>Cast:</h6>
-                        <p>Nathan Drake , Victor Sullivan , Sam Drake , Elena Fisher</p>
-                        <h6>Category :</h6>
-                        <p>Gaming , PS4 Exclusive , Gameplay , 1080p</p>
-                        <h6>About :</h6>
-                        <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved overVarious versions have evolved over the years, sometimes </p>
+                        <h6>Privasi :</h6>
+                        <p><?= ($detail['privasi_video'] == '1' ? 'Public' : 'Private') ?></p>
+                        
+                        <h6>Topik :</h6>
+                        <p><?= $detail['judul_topik'] ?></p>
+                        
+                        <h6>Deskripsi :</h6>
+                        <p><?= ctk($detail['deskripsi_video']) ?></p>
+                        
                         <h6>Tags :</h6>
                         <p class="tags mb-0">
-                            <span><a href="#">Uncharted 4</a></span>
-                            <span><a href="#">Playstation 4</a></span>
-                            <span><a href="#">Gameplay</a></span>
-                            <span><a href="#">1080P</a></span>
-                            <span><a href="#">ps4Share</a></span>
-                            <span><a href="#">+ 6</a></span>
+                            <?php
+                            $tag_arr = explode(',', $detail['tag_video']);
+                            for ($i=0; $i < count($tag_arr); $i++) {
+                                echo '<span><a href="#">'.$tag_arr[$i].'</a></span> ';
+                            }
+                            ?>
                         </p>
                     </div>
                 </div>
@@ -43,12 +52,6 @@
                 <div class="single-video-right">
                     <div class="row">
                         <div class="col-md-12">
-                            <div class="adblock">
-                                <div class="img">
-                                    Google AdSense<br>
-                                    336 x 280
-                                </div>
-                            </div>
                             <div class="main-title">
                                 <div class="btn-group float-right right-action">
                                     <a href="#" class="right-action-link text-gray" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -60,7 +63,7 @@
                                         <a class="dropdown-item" href="#"><i class="fas fa-fw fa-times-circle"></i> &nbsp; Close</a>
                                     </div>
                                 </div>
-                                <h6>Up Next</h6>
+                                <h6>Video Lainnya</h6>
                             </div>
                         </div>
                         <div class="col-md-12">

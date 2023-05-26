@@ -37,12 +37,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         <span class="jam"></span>
                     </a>
                 </li>
-                <li class="transparent">
-                    <a class="dropdown-toggle" href="<?= site_url('master/semester') ?>">
-                        <i class="ace-icon fa fa-graduation-cap"></i>
-                        <span ><?= $this->session->userdata('namasmt') ?></span>
-                    </a>
-                </li>
                 <li class="hide transparent hidden-xs hidden-sm">
                     <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                         <i class="ace-icon fa fa-bell icon-animated-bell"></i>

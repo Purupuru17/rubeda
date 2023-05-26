@@ -47,7 +47,7 @@ class KZ_Controller extends CI_Controller {
         $this->load->model(array('m_authentication','m_user'));
         
         $module_non_login = array('error_404','error_module','non_login','login','home');
-        $module_login = array('beranda','logout','video');
+        $module_login = array('beranda','logout','video','unggah','riwayat','topik','channel','subscribe');
 
         $module = ($this->uri->segment(1) == '' ? 'home' : $this->uri->segment(1));
         $class = ($this->uri->segment(2) == '' ? 'home' : $this->uri->segment(2));
@@ -184,14 +184,12 @@ class KZ_Controller extends CI_Controller {
     }
     //tmp id
     function _creator_id() {
-        $this->load->model(array('m_mhs'));
-        
-        if(empty($this->session->userdata('mid'))){
-            $rs = $this->m_mhs->getTmp(array('user_id' => $this->sessionid));
-            if(!is_null($rs)){
-                $this->session->set_userdata(array('mid' => $rs['mhs_id']));
+        if(empty($this->session->userdata('cid'))){
+            $query = $this->db->get_where('m_creator', array('user_id' => $this->sessionid))->row_array();
+            if(!empty($query)){
+                $this->session->set_userdata(array('cid' => $query['id_creator']));
             }
         }
-        $this->mid = $this->session->userdata('mid');
+        $this->cid = $this->session->userdata('cid');
     }
 }

@@ -4,7 +4,7 @@
             <div class="space-6"></div>
             <div class="center">
                 <a class="no-hover" href="<?= site_url() ?>">
-                    <img class="blur-up lazyload width-40" src="<?= load_file($app['logo']) ?>" />
+                    <img class="blur-up lazyload width-80" src="<?= load_file($app['logo']) ?>" />
                 </a>
             </div>
             <div class="space-6"></div>
@@ -55,7 +55,7 @@
                                 </fieldset>
                             </form>
                             <div class="social-or-login center">
-                                <span class="blue" id="id-company-text">Copyright © 2022 <?= $app['judul'] ?></span>
+                                <span class="blue" id="id-company-text">Copyright © 2023 <?= $app['judul'] ?></span>
                             </div>
                             <div class="space-6"></div>
                         </div><!-- /.widget-main -->

@@ -29,7 +29,7 @@
         <meta name="apple-mobile-web-app-status-bar-style" content="<?= $theme[10] ?>">
         <meta name="apple-mobile-web-app-title" content="<?php echo element('title', $meta, $meta_title_default) . ' | ' . $app['judul']; ?>">   
 
-        <link rel="shortcut icon" type="image/x-icon" href="<?= load_file('app/img/logo.png') ?>"/>  
+        <link rel="icon" type="image/png"  href="<?= load_file('app/img/logo.png') ?>"/>  
         <link rel="manifest" href="<?= base_url('manifest.json') ?>">
         <link rel="canonical" href="<?php echo element('url', $meta, $meta_url_default); ?>">
         <link rel="amphtml" href="<?php echo element('amp_url', $meta, $meta_url_default); ?>">
@@ -104,7 +104,14 @@
                                 </div>
                                 <div class="form-group">
                                     <label>Usia</label>
-                                    <input required="" name="usia" type="number" class="form-control" placeholder="Masukkan Usia">
+                                    <select required="" name="usia" class="form-control text-center">
+                                        <option value="">---> Pilih Usia <---</option>
+                                        <?php
+                                        for($i=7;$i<=60;$i++) {
+                                            echo '<option value="'.$i.'">'.$i.'</option>';
+                                        }
+                                        ?>
+                                    </select>
                                 </div>
                                 <div class="form-group">
                                     <label>Pekerjaan</label>

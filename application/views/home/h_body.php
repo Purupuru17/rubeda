@@ -29,7 +29,7 @@
         <meta name="apple-mobile-web-app-status-bar-style" content="<?= $theme[10] ?>">
         <meta name="apple-mobile-web-app-title" content="<?php echo element('title', $meta, $meta_title_default).' | '.$app['judul']; ?>">   
         
-        <link rel="shortcut icon" type="image/x-icon" href="<?= load_file('app/img/logo.png') ?>"/>  
+        <link rel="icon" type="image/png"  href="<?= load_file('app/img/logo.png') ?>"/>  
         <link rel="manifest" href="<?= base_url('manifest.json') ?>">
         <link rel="canonical" href="<?php echo element('url', $meta, $meta_url_default); ?>">
         <link rel="amphtml" href="<?php echo element('amp_url', $meta, $meta_url_default); ?>">
@@ -86,38 +86,56 @@
         <?php $this->load->view('home/h_header'); ?>
         
         <div id="wrapper">
-
+            
             <ul class="sidebar navbar-nav">
-                <li class="nav-item active">
+                <li class="nav-item <?= empty($this->uri->segment(1)) ? 'active':'' ?>">
                     <a class="nav-link" href="<?= site_url() ?>">
                         <i class="fas fa-fw fa-home"></i>
                         <span>Beranda</span>
                     </a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item <?= ($this->uri->segment(1) == 'channel') ? 'active':'' ?>">
                     <a class="nav-link" href="<?= site_url('channel') ?>">
                         <i class="fas fa-fw fa-users"></i>
-                        <span>Channels</span>
+                        <span>Channel</span>
                     </a>
                 </li>
                 <li class="nav-item channel-sidebar-list"></li>
-                <li class="nav-item">
-                    <a class="nav-link" href="<?= site_url('video/riwayat') ?>">
+                <li class="nav-item <?= ($this->uri->segment(1) == 'topik') ? 'active':'' ?>">
+                    <a class="nav-link" href="<?= site_url('topik') ?>">
+                        <i class="fas fa-fw fa-tags"></i>
+                        <span>Koleksi Topik</span>
+                    </a>
+                </li>
+                <li class="nav-item <?= ($this->uri->segment(1) == 'riwayat') ? 'active':'' ?>">
+                    <a class="nav-link" href="<?= site_url('riwayat') ?>">
                         <i class="fas fa-fw fa-history"></i>
                         <span>Riwayat</span>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="<?= site_url('video/topik') ?>">
-                        <i class="fas fa-fw fa-list-alt"></i>
-                        <span>Topik</span>
+                <li class="nav-item <?= ($this->uri->segment(100) == 'channel') ? 'active':'' ?>">
+                    <a class="nav-link" href="<?= site_url('') ?>">
+                        <i class="fas fa-fw fa-video"></i>
+                        <span>Video Anda</span>
+                    </a>
+                </li>
+                <li class="nav-item <?= ($this->uri->segment(100) == 'channel') ? 'active':'' ?>">
+                    <a class="nav-link" href="<?= site_url('') ?>">
+                        <i class="fas fa-fw fa-thumbs-up"></i>
+                        <span>Video Disukai</span>
+                    </a>
+                </li>
+                <li class="nav-item <?= ($this->uri->segment(100) == 'channel') ? 'active':'' ?>">
+                    <a class="nav-link" href="<?= site_url('') ?>">
+                        <i class="fas fa-fw fa-comment-dots"></i>
+                        <span>Komentar</span>
                     </a>
                 </li>
                 <li class="nav-item channel-sidebar-list">
-                    <h6>SUBSCRIPTIONS</h6>
+                    <a href="<?= site_url('subscribe') ?>"><h6>SUBSCRIPTIONS</h6></a>
                     <ul>
                         <li>
-                            <a href="subscriptions.html">
+                            <a href="<?= site_url('channel/okee') ?>">
                                 <img class="img-fluid" alt src="<?= base_url() ?>/app/frontend/vidoe/img/s1.png"> Your Life
                             </a>
                         </li>
@@ -156,27 +174,26 @@
                     //return false;
                 });
                 const filesToCache = [
-                    "app/backend/puru.css",
-                    "app/backend/assets/fonts/poppins/font.css?family=Poppins:300,400,500,600,700",
+                    "app/frontend/vidoe/vendor/bootstrap/css/bootstrap.min.css",
+                    "app/frontend/vidoe/vendor/fontawesome-free/css/all.min.css",
+                    "app/frontend/vidoe/css/osahan.css",
+                    "app/frontend/vidoe/vendor/owl-carousel/owl.carousel.css",
+                    "app/frontend/vidoe/vendor/owl-carousel/owl.theme.css",
                     
-                    "app/frontend/edu/css/reset.css",
-                    "app/frontend/edu/css/main-stylesheet.css",
-                    "app/frontend/edu/css/shortcode.css",
-                    "app/frontend/edu/css/fonts.css",
-                    "app/frontend/edu/css/colors.css",
-                    "app/frontend/edu/css/responsive.css",
-                    "app/frontend/edu/css/ppg.css",
-                    "app/backend/assets/js/lazy/lazysizes.min.js",
-                    "app/frontend/edu/jscript/jquery-latest.min.js",
-                    "app/frontend/edu/jscript/theme-scripts.js"
+                    "app/frontend/vidoe/vendor/jquery/jquery.min.js",
+                    "app/frontend/vidoe/vendor/bootstrap/js/bootstrap.bundle.min.js",
+                    "app/frontend/vidoe/vendor/jquery-easing/jquery.easing.min.js",
+                    "app/frontend/vidoe/vendor/owl-carousel/owl.carousel.js",
+                    "app/frontend/vidoe/js/custom.js",
+                    "app/frontend/vidoe/js/rocket-loader.min.js"
                 ];
-//                UpUp.start({
-//                    'cache-version': '<?= SW_VERSION ?>',
-//                    'content-url': '<?= site_url() ?>',
-//                    'content': 'No Internet Connection',
-//                    'service-worker-url': "<?= base_url('sw.js') ?>",
-//                    'assets': filesToCache
-//                });
+                UpUp.start({
+                    'cache-version': '<?= SW_VERSION ?>',
+                    'content-url': '<?= site_url() ?>',
+                    'content': 'No Internet Connection',
+                    'service-worker-url': "<?= base_url('sw.js') ?>",
+                    'assets': filesToCache
+                });
             });
         </script>
     </body>

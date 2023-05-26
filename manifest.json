@@ -1,12 +1,12 @@
 {
-    "name": "RUANG BELAJAR DESA",
+    "name": "RUANG BELAJAR DAERAH",
     "short_name": "RUBEDA",
-    "description": "Aplikasi Ruang Belajar Desa",
+    "description": "Aplikasi Ruang Belajar Daerah 3T",
     "lang": "id-ID",
     "start_url": "/",
     "display": "standalone",
-    "theme_color": "#438eb9",
-    "background_color": "#438eb9",
+    "theme_color": "#ffbd00",
+    "background_color": "#ffbd00",
     "icons": [
         {
             "src": "app/img/logo.png",
