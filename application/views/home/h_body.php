@@ -76,7 +76,7 @@
             "frontend/vidoe/vendor/owl-carousel/owl.theme.css"
         ));
         load_js(array(
-            "frontend/vidoe/vendor/jquery/jquery.min.js",
+            "frontend/vidoe/vendor/jquery/jquery.min.js"
         ));
         ?>
     </head>
@@ -167,34 +167,5 @@
             "frontend/vidoe/js/rocket-loader.min.js"
         ));
         ?>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/UpUp/1.0.0/upup.min.js"></script>
-        <script async type="text/javascript">
-            $(document).ready(function() {
-                $("body").on("contextmenu", function (e) {
-                    //return false;
-                });
-                const filesToCache = [
-                    "app/frontend/vidoe/vendor/bootstrap/css/bootstrap.min.css",
-                    "app/frontend/vidoe/vendor/fontawesome-free/css/all.min.css",
-                    "app/frontend/vidoe/css/osahan.css",
-                    "app/frontend/vidoe/vendor/owl-carousel/owl.carousel.css",
-                    "app/frontend/vidoe/vendor/owl-carousel/owl.theme.css",
-                    
-                    "app/frontend/vidoe/vendor/jquery/jquery.min.js",
-                    "app/frontend/vidoe/vendor/bootstrap/js/bootstrap.bundle.min.js",
-                    "app/frontend/vidoe/vendor/jquery-easing/jquery.easing.min.js",
-                    "app/frontend/vidoe/vendor/owl-carousel/owl.carousel.js",
-                    "app/frontend/vidoe/js/custom.js",
-                    "app/frontend/vidoe/js/rocket-loader.min.js"
-                ];
-                UpUp.start({
-                    'cache-version': '<?= SW_VERSION ?>',
-                    'content-url': '<?= site_url() ?>',
-                    'content': 'No Internet Connection',
-                    'service-worker-url': "<?= base_url('sw.js') ?>",
-                    'assets': filesToCache
-                });
-            });
-        </script>
     </body>
 </html>

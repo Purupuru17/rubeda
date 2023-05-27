@@ -5,15 +5,18 @@
                 <h6>Unggah Video</h6>
             </div>
         </div>
-        <div class="col-lg-2">
-            <div id="uploaded-file" class="imgplace"></div>
+        <div class="col-lg-3">
+            <div id="uploaded-file" class="imgplace" style="height: 130px"></div>
         </div>
-        <div class="col-lg-10">
+        <div class="col-lg-9">
             <div class="osahan-title text-primary">?</div>
             <div class="osahan-size text-danger">?</div>
             <div class="osahan-progress">
                 <div class="progress" style="height: 28px">
                     <div id="file-progress-bar" class="progress-bar progress-bar-success progress-bar-striped progress-bar-animated" role="progressbar"></div>
+                </div>
+                <div class="osahan-close">
+                    <a id="cancel-up" href="#"><i class="fas fa-times-circle"></i></a>
                 </div>
             </div>
             <div class="osahan-desc"></div>
@@ -104,49 +107,10 @@
         </div>
     </div>
 </div>
-<?php
-load_js(array(
-    'backend/assets/js/jquery.form.min.js',
-));
-?>
 <script type="text/javascript">
-    const module = "<?= site_url($module) ?>";  
+    const module = "<?= site_url($module) ?>";
     $("#judul").keyup(function () {
         $(".osahan-title").html(this.value);
-    });
-    $("#upload-form").submit(function(e) {
-        e.preventDefault();
-        $("#msg-check").html('');
-        $("#btn-submit").hide();
-        $(this).ajaxSubmit({
-            url: module + "/ajax/type/action/source/upload",
-            target: '#uploaded-file',
-            beforeSubmit: function () {
-                $("#file-progress-bar").width('0%');
-                $(".osahan-desc").html('<div class="text-info">Sedang mengupload video. Mohon tetap di halaman ini hingga proses upload selesai!</div>');
-            },
-            uploadProgress: function (event, position, total, percentComplete) {
-                $("#file-progress-bar").width(percentComplete + '%');
-                $("#file-progress-bar").html('' + percentComplete + ' %');
-                $(".osahan-desc").html("Terupload " + toSize(position) + " dari total " + toSize(total));
-            },
-            success: function(rs){
-                if(rs.status){
-                    $("#upload-form")[0].reset();
-                    $(".osahan-title, .osahan-size").html('');
-                    $(".osahan-desc").html('<div class="text-success">'+rs.msg+' Mohon tunggu halaman akan dimuat ulang.</div>');
-                    $("#uploaded-file").html('<video width="100%" height="94" controls><source src="'+rs.data+'"></video>');
-                    setTimeout(function() {location.reload();}, 3000);
-                }else{
-                    $("#btn-submit").show();
-                    $(".osahan-desc").html('<div class="text-danger">'+rs.msg+'</div>');
-                }
-            },
-            error: function (response, status, e) {
-                $("#btn-submit").show();
-                $(".osahan-desc").html('<div class="text-danger">'+response+'</div>');
-            }
-        });
     });
     $("#file").change(function(){
         var allowedTypes = ['video/mp4'];
@@ -157,7 +121,8 @@ load_js(array(
             $("#file").val('');
             return false;
         } else {
-            $(".osahan-size").html('Size : ' + toSize(file.size));
+            $("#uploaded-file").html('<video width="100%" height="130" controls><source src="'+ URL.createObjectURL(file) +'"></video>');
+            $(".osahan-size").html('Ukuran : ' + toSize(file.size));
             $("#msg-check").html('');
         }
     });
@@ -179,4 +144,72 @@ load_js(array(
         var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
         return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i];
     }
+    
+    $("#upload-form").on('submit', function (e) {
+        e.preventDefault();
+        var startTime = new Date().getTime();
+        var xhr = $.ajax({
+            xhr: function () {
+                var xhr = new XMLHttpRequest();
+                xhr.upload.addEventListener("progress", function (e) {
+                    if (e.lengthComputable) {
+                        var percentComplete = ((e.loaded / e.total) * 100);
+                        // calculate data transfer per sec
+                        var time = ( new Date().getTime() - startTime ) / 1000;
+    	                var bps = e.loaded / time;
+                        var Mbps = Math.floor(bps / (1024*1024));
+                        // calculate remaining time
+                        var remTime = (e.total - e.loaded) / bps;
+                        var seconds = Math.floor(remTime % 60);
+                        var minutes = Math.floor(remTime / 60);
+                        
+                        $(".osahan-size").html(`${toSize(e.loaded)} / ${toSize(e.total)} [${Mbps} Mbps] <br>Sisa waktu : ${minutes} menit ${seconds} detik`);
+                        $("#file-progress-bar").width(percentComplete + '%');
+                        $("#file-progress-bar").html('' + percentComplete + ' %');
+                        $(".osahan-desc").html("Terupload " + toSize(e.loaded) + " dari total " + toSize(e.total));
+                        // cancel button only work when file is uploading
+                        if(percentComplete > 0 && percentComplete < 100){
+                            $("#cancel-up").show();
+                        }else{
+                            $("#cancel-up").hide();
+                        }
+                    }
+                }, false);
+                return xhr;
+            },
+            type: 'POST',
+            url: module + "/ajax/type/action/source/upload",
+            data: new FormData(this),
+            contentType: false,
+            cache: false,
+            processData: false,
+            beforeSend: function () {
+                $("#msg-check").html('');
+                $("#upload-form").hide();
+                $("#file-progress-bar").width('0%');
+                $(".osahan-desc").html('<div class="text-info">Sedang mengupload video. Mohon tetap di halaman ini hingga proses upload selesai!</div>');
+            },
+            error: function (response, status, e) {
+                $("#upload-form").show();
+                $(".osahan-desc").html('<div class="text-danger">'+response+'</div>');
+            },
+            success: function (rs) {
+                if(rs.status){
+                    $("#upload-form")[0].reset();
+                    $(".osahan-title, #uploaded-file").html('');
+                    $(".osahan-desc").html('<div class="text-success">'+rs.msg+' Muat ulang halaman ini apabila ingin mengunggah video lainnya.</div>');
+                }else{
+                    $("#upload-form").show();
+                    $(".osahan-desc").html('<div class="text-danger">'+rs.msg+'</div>');
+                }
+            }
+        });
+        // for cancel file transfer
+        $("#cancel-up").on("click", () => {
+            xhr.abort().then(
+                $("#file-progress-bar").width('0%'),
+                $(".osahan-desc").html('<div class="text-danger">Upload video di batalkan</div>')
+            )
+        });
+    });
 </script>

@@ -8,7 +8,6 @@ class Video extends KZ_Controller {
     
     function __construct() {
         parent::__construct();
-        
         $this->_creator_id();
     }
     function index($url = null) {
@@ -24,6 +23,7 @@ class Video extends KZ_Controller {
         }
         $this->data['detail'] = $detail;
         $this->data['module'] = $this->module;
+        $this->data['meta'] = array('title' => $detail['judul_video'], 'description' => $detail['deskripsi_video'],'thumbnail' => load_file($detail['img_video']));
         $this->load_home('home/video/h_index', $this->data);
     }
     function unggah() {
@@ -65,17 +65,31 @@ class Video extends KZ_Controller {
         }
     }
     //function
+    function _tes(){
+        $cfg['file_name'] = random_string('unique');
+        $cfg['upload_path'] = './'.$this->path.'/video/';
+        $cfg['allowed_types'] = 'mp4';
+        $cfg['max_size'] = 500000;
+        $cfg['remove_spaces'] = true;
+        $this->upload->initialize($cfg);
+        //do upload
+        if(!$this->upload->do_upload('file')) {
+            jsonResponse(array('status' => false, 'msg' => 'Video '.strip_tags($this->upload->display_errors())));
+        }
+        $data['file_video']  = $this->path.'/video/' . $this->upload->data('file_name');
+        jsonResponse(array('status' => true, 'msg' => 'Video telah berhasil diupload! '.$data['file_video']));
+    }
     function _upload_video() {
         $this->load->library(array('upload'));
         
-        if(!$this->_validation($this->rules, 1)){
-            jsonResponse(array('status' => false, 'msg' => validation_errors()));
-        }
         if (empty($_FILES['file']['tmp_name'])) {
             jsonResponse(array('status' => false, 'msg' => 'Pilih Video terlebih dahulu'));
         }
         if (empty($_FILES['thumb']['tmp_name'])) {
             jsonResponse(array('status' => false, 'msg' => 'Pilih Thumbnail Video terlebih dahulu'));
+        }
+        if(!$this->_validation($this->rules, 1)){
+            jsonResponse(array('status' => false, 'msg' => validation_errors()));
         }
         $data['topik_id'] = decode($this->input->post('topik'));
         $data['judul_video'] = ucwords(strtolower($this->input->post('judul')));
@@ -97,7 +111,7 @@ class Video extends KZ_Controller {
         //upload thumbnail
         $thumb = $this->_upload_img('thumb', $data['slug_video'], $this->path.'/thumb/', 270, false, 169);
         if(empty($thumb)){
-            jsonResponse(array('status' => false, 'msg' => strip_tags($this->upload->display_errors())));
+            jsonResponse(array('status' => false, 'msg' => 'Thumbnail '.strip_tags($this->upload->display_errors())));
         }
         $data['img_video'] = $thumb;
         //upload video
@@ -110,17 +124,17 @@ class Video extends KZ_Controller {
         //do upload
         if(!$this->upload->do_upload('file')) {
             delete_file($thumb);
-            jsonResponse(array('status' => false, 'msg' => strip_tags($this->upload->display_errors())));
+            jsonResponse(array('status' => false, 'msg' => 'Video '.strip_tags($this->upload->display_errors())));
         }
         $data['file_video']  = $this->path.'/video/' . $this->upload->data('file_name');
         //insert db
         $this->db->set('id_video', 'UUID()', FALSE);
         $this->db->insert('m_video', $data);
         if($this->db->affected_rows() > 0){
-            jsonResponse(array('data' => base_url($data['file_video']), 'status' => true, 'msg' => 'Video telah berhasil diupload!'));
+            jsonResponse(array('status' => true, 'msg' => 'Video telah berhasil di upload!'));
         }else{
             delete_file($thumb);delete_file($data['file_video']);
-            jsonResponse(array('status' => false, 'msg' => 'Video gagal diupload!'));
+            jsonResponse(array('status' => false, 'msg' => 'Video gagal di upload!'));
         }
     }
     private $rules = array(
