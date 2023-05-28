@@ -41,43 +41,101 @@ class Video extends KZ_Controller {
         $this->data['module'] = $this->module;
         $this->load_home('home/video/h_upload', $this->data);
     }
-    function riwayat() {
+    function profil($url = null) {
+        $this->data['type'] = empty($url) ? 'profil' : $url;
         $this->data['module'] = $this->module;
-        $this->load_home('home/video/h_riwayat', $this->data);
+        $this->load_home('home/video/h_profil', $this->data);
     }
-    function topik() {
-        $this->data['module'] = $this->module;
-        $this->load_home('home/video/h_topik', $this->data);
-    }
-    function topik_detail($url = null) {
-        $this->data['module'] = $this->module;
-        $this->load_home('home/video/h_topik', $this->data);
+    function topik($id = null) {
+        if(empty($id)){
+            $this->data['module'] = $this->module;
+            $this->load_home('home/video/h_topik', $this->data);
+            return;
+        }
+        $detail = $this->db->get_where('m_topik',array('id_topik' => decode($id)))->row_array();
+        if(empty($detail)){
+            $this->session->set_flashdata('notif', notif('warning', 'Peringatan', 'Topik tidak tersedia untuk saat ini'));
+            redirect();
+        }
+        $this->data['type'] = array($detail['judul_topik'],$id);
+        $this->load_home('home/video/h_profil', $this->data);
     }
     function ajax() {
         $routing_module = $this->uri->uri_to_assoc(3, $this->url_route);
         if(is_null($routing_module['type'])){
             redirect('');
         }
-        if($routing_module['type'] == 'action') {
+        if($routing_module['type'] == 'list') {
+            if($routing_module['source'] == 'info') {
+                $this->_get_info();
+            }
+        }else if($routing_module['type'] == 'action') {
             if($routing_module['source'] == 'upload') {
                 $this->_upload_video();
+            }else if($routing_module['source'] == 'liked') {
+                $this->_liked_video();
             }
         }
     }
     //function
-    function _tes(){
-        $cfg['file_name'] = random_string('unique');
-        $cfg['upload_path'] = './'.$this->path.'/video/';
-        $cfg['allowed_types'] = 'mp4';
-        $cfg['max_size'] = 500000;
-        $cfg['remove_spaces'] = true;
-        $this->upload->initialize($cfg);
-        //do upload
-        if(!$this->upload->do_upload('file')) {
-            jsonResponse(array('status' => false, 'msg' => 'Video '.strip_tags($this->upload->display_errors())));
+    function _get_info() {
+        $id = $this->input->post('id');
+        $cid = $this->input->post('cid');
+        
+        $st_subs = $this->db->get_where('fk_subscribe', array('creator_id' => decode($cid), 'user_id' => $this->sessionid))->num_rows();
+        $st_like = $this->db->get_where('fk_like', array('video_id' => decode($id), 'user_id' => $this->sessionid))->row_array();
+        $st_viewed = $this->db->get_where('fk_riwayat', array('video_id' => decode($id), 
+            'user_id' => $this->sessionid, 'DATE(create_riwayat)' => date('Y-m-d')))->num_rows();
+        $liked = $this->db->get_where('fk_like',array('video_id' => decode($id), 'status_like' => '1'))->num_rows();
+        
+        if($st_viewed < 1){
+            $this->db->insert('fk_riwayat', array('video_id' => decode($id), 'user_id' => $this->sessionid, 'create_riwayat' => date('Y-m-d H:i:s')));
         }
-        $data['file_video']  = $this->path.'/video/' . $this->upload->data('file_name');
-        jsonResponse(array('status' => true, 'msg' => 'Video telah berhasil diupload! '.$data['file_video']));
+        $data['btn_subs'] = ($st_subs > 0) ? '<button id="subs-btn" itemid="'.$cid.'"
+            itemprop="'.encode(1).'" type="button" class="btn btn-success"><i class="fa fa-bell-slash"></i> Subscribed</button>' : 
+            '<button id="subs-btn" itemid="'.$cid.'" itemprop="'.encode(2).'"
+            type="button" class="btn btn-danger"><strong><i class="fa fa-bell"></i> Subscribe</strong></button>';
+        
+        if(empty($st_like)){
+            $data['btn_like'] = '<button id="like-btn" itemprop="'.encode(2).'" class="btn btn-outline-danger" type="button"><i class="fa fa-thumbs-up"></i> '.$liked.'</button>
+                <button id="unlike-btn" itemprop="'.encode(2).'" class="btn btn-outline-secondary" type="button"><i class="fa fa-thumbs-down"></i></button>';
+        }else if($st_like['status_like'] == '1'){
+            $data['btn_like'] = '<button id="like-btn" itemprop="'.encode(1).'" class="btn btn-success" type="button"><i class="fa fa-thumbs-up"></i> '.$liked.'</button>';
+        }else if($st_like['status_like'] == '0'){
+            $data['btn_like'] = '<button disable class="btn btn-outline-success" type="button">'.$liked.' Likes</button>
+                <button id="unlike-btn" itemprop="'.encode(1).'" class="btn btn-secondary" type="button"><i class="fa fa-thumbs-down"></i> </button>';
+        }
+        $data['viewed'] = $this->db->get_where('fk_riwayat',array('video_id' => decode($id)))->num_rows();
+        
+        jsonResponse(array('data' => $data, 'status' => true, 'msg' => 'Data ditemukan'));
+    }
+    function _liked_video() {
+        $status = $this->input->post('status');
+        $btn = $this->input->post('btn');
+        
+        $data['video_id'] = decode($this->input->post('id'));
+        $data['user_id'] = $this->sessionid;
+        $data['status_like'] = ($btn == 'unlike') ? '0' : '1';
+        
+        if(empty(decode($status))){
+            jsonResponse(array('status' => false, 'msg' => 'Video tidak ditemukan'));
+        }
+        if(decode($status) == 1){
+            $this->db->where($data)->delete('fk_like');
+            $delete = $this->db->affected_rows();
+            if($delete > 0){
+                jsonResponse(array('status' => true, 'msg' => 'Batal '.ucwords($btn).' Video ini'));
+            }else{
+                jsonResponse(array('status' => false, 'msg' => 'Gagal membatalkan masukan. Mohon ulangi kembali'));
+            }
+        }
+        $this->db->insert('fk_like', $data);
+        $insert = $this->db->affected_rows();
+        if($insert > 0){
+            jsonResponse(array('status' => true, 'msg' => 'Anda '.ucwords($btn).' Video ini'));
+        }else{
+            jsonResponse(array('status' => false, 'msg' => 'Gagal memberi masukan. Mohon ulangi kembali'));
+        }
     }
     function _upload_video() {
         $this->load->library(array('upload'));

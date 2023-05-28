@@ -57,11 +57,12 @@ $route['beranda'] = "non_login/beranda";
 
 $route['video/(:any)'] = "video/index/$1";
 $route['unggah'] = "video/unggah";
-$route['riwayat'] = "video/riwayat";
+$route['profil'] = "video/profil";
+$route['profil/(:any)'] = "video/profil/$1";
 $route['topik'] = "video/topik";
-$route['topik/(:any)'] = "video/topik_detail/$1";
+$route['topik/(:any)'] = "video/topik/$1";
 
-$route['channel/(:any)'] = "channel/detail/$1";
+$route['channel/(:any)'] = "channel/index/$1";
 $route['subscribe'] = "channel/subscribe";
 
 $route['error_404'] = "home/err_404";

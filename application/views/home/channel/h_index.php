@@ -1,66 +1,79 @@
 <div class="container-fluid pb-0">
     <div class="video-block section-padding">
         <div class="row">
-            <div class="col-md-12">
+            <div id="channel-item" class="col-md-12">
                 <div class="main-title">
                     <div class="btn-group float-right right-action">
                         <a href="#" class="right-action-link text-gray" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Sort by <i class="fa fa-caret-down" aria-hidden="true"></i>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right">
-                            <a class="dropdown-item" href="#"><i class="fas fa-fw fa-star"></i> &nbsp; Top Rated</a>
-                            <a class="dropdown-item" href="#"><i class="fas fa-fw fa-signal"></i> &nbsp; Viewed</a>
-                            <a class="dropdown-item" href="#"><i class="fas fa-fw fa-times-circle"></i> &nbsp; Close</a>
+                            <a id="channel-sort" itemid="populer" class="dropdown-item"><i class="fas fa-fw fa-star"></i> &nbsp; Populer</a>
+                            <a id="channel-sort" itemid="baru" class="dropdown-item"><i class="fas fa-fw fa-clock"></i> &nbsp; Terbaru</a>
                         </div>
                     </div>
-                    <h6>Channels</h6>
-                </div>
-            </div>
-            <div class="col-xl-3 col-sm-6 mb-3">
-                <div class="channels-card">
-                    <div class="channels-card-image">
-                        <a href="#"><img class="img-fluid" src="img/s1.png" alt></a>
-                        <div class="channels-card-image-btn"><button type="button" class="btn btn-outline-danger btn-sm">Subscribe <strong>1.4M</strong></button></div>
-                    </div>
-                    <div class="channels-card-body">
-                        <div class="channels-title">
-                            <a href="#">Channels Name</a>
-                        </div>
-                        <div class="channels-view">
-                            382,323 subscribers
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xl-3 col-sm-6 mb-3">
-                <div class="channels-card">
-                    <div class="channels-card-image">
-                        <a href="#"><img class="img-fluid" src="img/s3.png" alt></a>
-                        <div class="channels-card-image-btn"><button type="button" class="btn btn-outline-secondary btn-sm">Subscribed <strong>1.4M</strong></button></div>
-                    </div>
-                    <div class="channels-card-body">
-                        <div class="channels-title">
-                            <a href="#">Channels Name <span title data-placement="top" data-toggle="tooltip" data-original-title="Verified"><i class="fas fa-check-circle"></i></span></a>
-                        </div>
-                        <div class="channels-view">
-                            382,323 subscribers
-                        </div>
-                    </div>
+                    <h6 class="title"><?= $title ?></h6>
                 </div>
             </div>
         </div>
-        <nav aria-label="Page navigation example">
-            <ul class="pagination justify-content-center pagination-sm mb-4">
-                <li class="page-item disabled">
-                    <a class="page-link" href="#" tabindex="-1">Previous</a>
-                </li>
-                <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item">
-                    <a class="page-link" href="#">Next</a>
-                </li>
-            </ul>
-        </nav>
     </div>
 </div>
+<?php
+    load_js(array(
+        'backend/assets/js/bootbox.min.js'
+    ));
+?>
+<script type="text/javascript">
+    const module = "<?= site_url('home') ?>";  
+    $(function () {
+        get_channel();
+    });
+    $(document.body).on("click", "#channel-sort", function(event) {
+        get_channel($(this).attr("itemid"));
+    });
+    $(document.body).on("click", "#subs-btn", function(event) {
+        subs_channel($(this).attr("itemid"), $(this).attr("itemprop"));
+        $(this).hide();
+    });
+</script>
+<script type="text/javascript">
+    function get_channel(sort = null) {
+        $.ajax({
+            url: module + "/ajax/type/list/source/channel",
+            type: "POST",
+            dataType: "json",
+            data: { sort: sort, key: $("#q-search").val(), limit: 40, type: $(".title").text() },
+            success: function (rs) {
+                $(".channel-item").remove();
+                if(rs.status) {
+                    $(rs.data).insertAfter("#channel-item");
+                }
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                console.log('Failed fetch data from server');
+            }
+        });
+    }
+    function subs_channel(id, status){
+        $.ajax({
+            url: module + "/ajax/type/action/source/subscribe",
+            dataType: "json",
+            type: "POST",
+            data: {
+                id: id,
+                status: status
+            },
+            success: function (rs) {
+                if (rs.status) {
+                    bootbox.alert({ message: rs.msg, backdrop: true });
+                    get_channel();
+                } else {
+                    bootbox.alert({ message: rs.msg, backdrop: true });
+                }
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                console.log(xhr);
+            }
+        });
+    }
+</script>

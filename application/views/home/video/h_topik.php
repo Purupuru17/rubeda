@@ -1,43 +1,48 @@
 <div class="container-fluid">
     <div class="video-block section-padding">
         <div class="row">
-            <div class="col-md-12">
+            <div id="topik-item" class="col-md-12">
                 <div class="main-title">
                     <div class="btn-group float-right right-action">
                         <a href="#" class="right-action-link text-gray" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Sort by <i class="fa fa-caret-down" aria-hidden="true"></i>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right">
-                            <a class="dropdown-item" href="#"><i class="fas fa-fw fa-star"></i> &nbsp; Top Rated</a>
-                            <a class="dropdown-item" href="#"><i class="fas fa-fw fa-signal"></i> &nbsp; Viewed</a>
-                            <a class="dropdown-item" href="#"><i class="fas fa-fw fa-times-circle"></i> &nbsp; Close</a>
+                            <a id="topik-sort" itemid="most" class="dropdown-item"><i class="fas fa-fw fa-star"></i> &nbsp; Top Video</a>
+                            <a id="topik-sort" itemid="asc" class="dropdown-item"><i class="fas fa-fw fa-signal"></i> &nbsp; Terurut</a>
                         </div>
                     </div>
-                    <h6>Categories</h6>
-                </div>
-            </div>
-            <div class="col-xl-3 col-sm-6 mb-3">
-                <div class="category-item mt-0 mb-0">
-                    <a href="shop.html">
-                        <img class="img-fluid" src="img/s1.png" alt>
-                        <h6>Your Life <span title data-placement="top" data-toggle="tooltip" data-original-title="Verified"><i class="fas fa-check-circle text-success"></i></span></h6>
-                        <p>74,853 views</p>
-                    </a>
+                    <h6>Topik</h6>
                 </div>
             </div>
         </div>
-        <nav aria-label="Page navigation example">
-            <ul class="pagination justify-content-center pagination-sm mb-0">
-                <li class="page-item disabled">
-                    <a class="page-link" href="#" tabindex="-1">Previous</a>
-                </li>
-                <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item">
-                    <a class="page-link" href="#">Next</a>
-                </li>
-            </ul>
-        </nav>
     </div>
 </div>
+<script type="text/javascript">
+    const home = "<?= site_url('home') ?>";  
+    $(function () {
+        get_topik();
+    });
+    $(document.body).on("click", "#topik-sort", function(event) {
+        get_topik($(this).attr("itemid"));
+    });
+</script>
+<script type="text/javascript">
+    function get_topik(sort = null) {
+        $.ajax({
+            url: home + "/ajax/type/list/source/topik",
+            type: "POST",
+            dataType: "json",
+            data: { sort: sort, key: $("#q-search").val(), limit: 40 },
+            success: function (rs) {
+                $(".topik-item").remove();
+                if(rs.status) {
+                    $(rs.content).insertAfter("#topik-item");
+                }
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                console.log('Failed fetch data from server');
+            }
+        });
+    }
+</script>

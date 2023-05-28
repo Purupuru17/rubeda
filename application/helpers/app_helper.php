@@ -109,16 +109,16 @@ if (!function_exists('st_file')) {
         return $rs; 
     }
 }
-if (!function_exists('st_tagih')) {
+if (!function_exists('st_privasi')) {
 
-    function st_tagih($value) {
+    function st_privasi($value) {
 
         if ($value == '1') {
-            $status = '<span class="label label-success arrowed-in-right arrowed">LUNAS</span>';
+            $status = '<span class="label label-success arrowed-in-right arrowed">PUBLIC</span>';
         } else if ($value == '0') {
-            $status = '<span class="label label-danger arrowed-in-right arrowed">BELUM LUNAS</span>';
+            $status = '<span class="label label-danger arrowed-in-right arrowed">OFFLINE</span>';
         } else {
-            $status = '<span class="label label-default arrowed-in-right arrowed">PENDING</span>';
+            $status = '<span class="label label-warning arrowed-in-right arrowed">PRIVATE</span>';
         }
         return $status;
     }
@@ -219,7 +219,7 @@ if (!function_exists('load_array')) {
                 break;
             case 'lokasi':
                 $val = array(
-                    'MAJARAN','MAJENER','AIMAS'
+                    'MALAMOJA','MAGATARUM','MALAJAPA','MALASIGIT','Masjid Baitul Rahim','Gereja Santo Antonius Padua'
                 );
                 break;
             case 'st_mhs':
@@ -228,11 +228,10 @@ if (!function_exists('load_array')) {
                     'DIKELUARKAN','WAFAT','PUTUS SEKOLAH','MENGUNDURKAN DIRI','HILANG','TIDAK AKTIF'
                 );
                 break;
-            case 'st_akm':
+            case 'st_usia':
                 $val = array(
-                    array('id' => 'A', 'txt' => 'AKTIF'),array('id' => 'N', 'txt' => 'NON-AKTIF'),
-                    array('id' => 'C', 'txt' => 'CUTI'),array('id' => 'G', 'txt' => 'DOUBLE DEGREE'),
-                    array('id' => 'M', 'txt' => 'KAMPUS MERDEKA')
+                    array('id' => 0, 'txt' => 'UMUM'),array('id' => 1, 'txt' => 'DEWASA'),
+                    array('id' => 2, 'txt' => 'REMAJA'),array('id' => 3, 'txt' => 'ANAK-ANAK')
                 );
                 break;
             case 'st_opsi':

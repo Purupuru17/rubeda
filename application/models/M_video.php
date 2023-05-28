@@ -4,8 +4,8 @@ class M_video extends CI_Model {
     
     var $id = 'id_video';
     var $table = 'm_video';
-    var $column_order = array(null,'judul_video','judul_topik','privasi_video','usia_video','status_video','tag_video',null); //set column field database for datatable orderable
-    var $column_search = array('judul_video','judul_topik','privasi_video','usia_video','status_video','tag_video'); //set column field database for datatable searchable 
+    var $column_order = array(null,'judul_video','judul_topik','privasi_video','usia_video','status_video','nama_creator',null); //set column field database for datatable orderable
+    var $column_search = array('judul_video','judul_topik','privasi_video','usia_video','status_video','nama_creator'); //set column field database for datatable searchable 
     var $order = array('create_video' => 'desc'); // default order 
     
     //INSERT
@@ -78,6 +78,7 @@ class M_video extends CI_Model {
     function get_datatables_query($where = NULL) {
         $this->db->from($this->table.' v');
         $this->db->join('m_topik t', 'v.topik_id = t.id_topik', 'inner');
+        $this->db->join('m_creator c', 'v.creator_id = c.id_creator', 'inner');
         if(!is_null($where)){
             $this->db->where($where);
         }

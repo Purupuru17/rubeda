@@ -73,10 +73,11 @@
                             <label>Batasan Usia</label>
                             <select required="" name="usia" class="custom-select text-center">
                                 <option value="">---> Pilih Opsi <---</option>
-                                <option value="0">Umum</option>
-                                <option value="1">Dewasa</option>
-                                <option value="2">Remaja</option>
-                                <option value="3">Anak-Anak</option>
+                                <?php
+                                foreach (load_array('st_usia') as $val) {
+                                    echo '<option value="'.$val['id'].'">'.$val['txt'].'</option>';
+                                }
+                                ?>
                             </select>
                         </div>
                     </div>
@@ -85,8 +86,8 @@
                             <label>Pengaturan Privasi</label>
                             <select required="" name="privasi" class="custom-select text-center">
                                 <option value="">---> Pilih Opsi <---</option>
-                                <option value="1">Public</option>
-                                <option value="2">Private</option>
+                                <option value="1">PUBLIC</option>
+                                <option value="2">PRIVATE</option>
                             </select>
                         </div>
                     </div>

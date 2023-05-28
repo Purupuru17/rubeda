@@ -97,30 +97,30 @@
                 <li class="nav-item <?= ($this->uri->segment(1) == 'channel') ? 'active':'' ?>">
                     <a class="nav-link" href="<?= site_url('channel') ?>">
                         <i class="fas fa-fw fa-users"></i>
-                        <span>Channel</span>
+                        <span>Channels</span>
                     </a>
                 </li>
-                <li class="nav-item channel-sidebar-list"></li>
                 <li class="nav-item <?= ($this->uri->segment(1) == 'topik') ? 'active':'' ?>">
                     <a class="nav-link" href="<?= site_url('topik') ?>">
                         <i class="fas fa-fw fa-tags"></i>
                         <span>Koleksi Topik</span>
                     </a>
                 </li>
-                <li class="nav-item <?= ($this->uri->segment(1) == 'riwayat') ? 'active':'' ?>">
-                    <a class="nav-link" href="<?= site_url('riwayat') ?>">
+                <li class="nav-item channel-sidebar-list"></li>
+                <li class="nav-item <?= ($this->uri->segment(2) == 'riwayat') ? 'active':'' ?>">
+                    <a class="nav-link" href="<?= site_url('profil/riwayat') ?>">
                         <i class="fas fa-fw fa-history"></i>
                         <span>Riwayat</span>
                     </a>
                 </li>
-                <li class="nav-item <?= ($this->uri->segment(100) == 'channel') ? 'active':'' ?>">
-                    <a class="nav-link" href="<?= site_url('') ?>">
+                <li class="nav-item <?= ($this->uri->segment(1) == 'profil' && empty($this->uri->segment(2))) ? 'active':'' ?>">
+                    <a class="nav-link" href="<?= site_url('profil') ?>">
                         <i class="fas fa-fw fa-video"></i>
                         <span>Video Anda</span>
                     </a>
                 </li>
-                <li class="nav-item <?= ($this->uri->segment(100) == 'channel') ? 'active':'' ?>">
-                    <a class="nav-link" href="<?= site_url('') ?>">
+                <li class="nav-item <?= ($this->uri->segment(2) == 'like') ? 'active':'' ?>">
+                    <a class="nav-link" href="<?= site_url('profil/like') ?>">
                         <i class="fas fa-fw fa-thumbs-up"></i>
                         <span>Video Disukai</span>
                     </a>
@@ -131,16 +131,12 @@
                         <span>Komentar</span>
                     </a>
                 </li>
-                <li class="nav-item channel-sidebar-list">
-                    <a href="<?= site_url('subscribe') ?>"><h6>SUBSCRIPTIONS</h6></a>
-                    <ul>
-                        <li>
-                            <a href="<?= site_url('channel/okee') ?>">
-                                <img class="img-fluid" alt src="<?= base_url() ?>/app/frontend/vidoe/img/s1.png"> Your Life
-                            </a>
-                        </li>
-                        </li>
-                    </ul>
+                <li class="nav-item channel-sidebar-list"></li>
+                <li class="nav-item <?= ($this->uri->segment(1) == 'subscribe') ? 'active':'' ?>">
+                    <a class="nav-link" href="<?= site_url('subscribe') ?>">
+                        <i class="fas fa-fw fa-bell"></i>
+                        <span>Subscriptions</span>
+                    </a>
                 </li>
             </ul>
             

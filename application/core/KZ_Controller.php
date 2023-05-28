@@ -47,7 +47,7 @@ class KZ_Controller extends CI_Controller {
         $this->load->model(array('m_authentication','m_user'));
         
         $module_non_login = array('error_404','error_module','non_login','login','home');
-        $module_login = array('beranda','logout','video','unggah','riwayat','topik','channel','subscribe');
+        $module_login = array('beranda','logout','video','unggah','profil','topik','channel','subscribe');
 
         $module = ($this->uri->segment(1) == '' ? 'home' : $this->uri->segment(1));
         $class = ($this->uri->segment(2) == '' ? 'home' : $this->uri->segment(2));

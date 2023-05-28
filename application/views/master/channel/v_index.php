@@ -16,17 +16,16 @@ $this->load->view('sistem/v_breadcrumb');
             <?= $this->session->flashdata('notif'); ?>
         </div>
         <div class="col-xs-12">
-            <form id="search-form" name="form" action="<?= site_url($module.'/export') ?>" class="form-horizontal" method="POST">
+            <form id="search-form" name="form" class="form-horizontal" method="POST">
                 <div class="form-group">
-                    <label class="control-label col-xs-12 col-sm-2 no-padding-right">Program Studi :</label>
+                    <label class="control-label col-xs-12 col-sm-2 no-padding-right">Pekerjaan :</label>
                     <div class="col-xs-12 col-sm-3">
                         <div class="clearfix">
-                            <select class="select2 width-100" name="prodi" id="prodi" data-placeholder="------> Pilih Program Studi <------">
+                            <select class="select2 width-100" name="kerja" id="kerja" data-placeholder="------> Pilih Pekerjaan <------">
                                 <option value=""> </option>
                                 <?php
-                                foreach ($prodi['data'] as $val) {
-                                    $selected = ($prodi_id == $val['id_prodi']) ? 'selected' : '';
-                                    echo '<option value="'.encode($val['id_prodi']).'" '.$selected.'>'.$val['nama_prodi'].'</option>';
+                                foreach (load_array('kerja') as $value) {
+                                    echo '<option value="'.$value.'">'.$value.'</option>';
                                 }
                                 ?>
                             </select>
@@ -34,14 +33,14 @@ $this->load->view('sistem/v_breadcrumb');
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="control-label col-xs-12 col-sm-2 no-padding-right">Angkatan :</label>
-                    <div class="col-xs-12 col-sm-2">
+                    <label class="control-label col-xs-12 col-sm-2 no-padding-right">Lokasi :</label>
+                    <div class="col-xs-12 col-sm-3">
                         <div class="clearfix">
-                            <select class="select2 width-100" name="tahun" id="tahun" data-placeholder="---> Pilih Tahun <---">
+                            <select class="select2 width-100" name="lokasi" id="lokasi" data-placeholder="------> Pilih Kampung <------">
                                 <option value=""> </option>
                                 <?php
-                                foreach (load_array('tahun') as $val) {
-                                    echo '<option value="'.$val.'">'.$val.'</option>';
+                                foreach (load_array('lokasi') as $value) {
+                                    echo '<option value="'.$value.'">'.$value.'</option>';
                                 }
                                 ?>
                             </select>
@@ -54,23 +53,8 @@ $this->load->view('sistem/v_breadcrumb');
                         <div class="clearfix">
                             <select class="select2 width-100" name="status" id="status" data-placeholder="---> Pilih Status <---">
                                 <option value=""> </option>
-                                <?php
-                                foreach (load_array('st_mhs') as $val) {
-                                    echo '<option value="'.$val.'">'.$val.'</option>';
-                                }
-                                ?>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group <?= $this->session->userdata('level') > 100 ? '':'hide' ?>">
-                    <label class="control-label col-xs-12 col-sm-2 no-padding-right">AKM <?= $this->session->userdata('namasmt') ?> :</label>
-                    <div class="col-xs-12 col-sm-2">
-                        <div class="clearfix">
-                            <select class="select2 width-100" name="akm" id="akm" data-placeholder="--> Pilih Periode <--">
-                                <option value=""> </option>
-                                <option value="<?= $this->session->userdata('idsmt') ?>"> YA </option>
-                                <option value="1"> TIDAK </option>
+                                <option value="1"> AKTIF </option>
+                                <option value="0"> TIDAK AKTIF </option>
                             </select>
                         </div>
                     </div>
@@ -80,10 +64,6 @@ $this->load->view('sistem/v_breadcrumb');
                         <button class="btn btn-primary btn-white" name="cari" id="btn-search" type="button">
                             <i class="ace-icon fa fa-search-plus"></i>
                             Pencarian
-                        </button>
-                        <button class="btn btn-success btn-white" name="export" id="btn-export" type="submit">
-                            <i class="ace-icon fa fa-file-excel-o"></i>
-                            Export
                         </button>
                     </div>
                 </div>
@@ -103,10 +83,11 @@ $this->load->view('sistem/v_breadcrumb');
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>NIM</th>
-                                    <th>Nama Lengkap</th>
-                                    <th>Program Studi</th>
-                                    <th>Jenis Kelamin</th>
+                                    <th width="20%">Nama</th>
+                                    <th>Usia</th>
+                                    <th>Telepon</th>
+                                    <th>Pekerjaan</th>
+                                    <th>Lokasi</th>
                                     <th>Status</th>
                                     <th>Aksi</th>
                                 </tr>
@@ -126,8 +107,8 @@ $this->load->view('sistem/v_breadcrumb');
     load_js(array(
         'backend/assets/js/dataTables/jquery.dataTables.js',
         'backend/assets/js/dataTables/jquery.dataTables.bootstrap.js',
-        'backend/assets/js/select2.js',
-        'backend/assets/js/bootbox.min.js'
+        'backend/assets/js/bootbox.min.js',
+        'backend/assets/js/select2.js'
     ));
 ?>
 <script type="text/javascript">
@@ -138,7 +119,6 @@ $this->load->view('sistem/v_breadcrumb');
         $('[data-rel="tooltip"]').tooltip({placement: 'top'});
         $(".select2").select2({allowClear: true});
         $(".select2-chosen").addClass("center");
-        
         load_table();
     });
     $(document.body).on("click", "#delete-btn", function(event) {
@@ -168,32 +148,116 @@ $this->load->view('sistem/v_breadcrumb');
             }
         });
     });
+    $(document.body).on("click", "#valid-btn", function(event) {
+        var id = $(this).attr("itemid");
+        var name = $(this).attr("itemname");
+        var title = "<h4 class='red center'><i class='ace-icon fa fa-exclamation-triangle red'></i>" + 
+                " Peringatan !</h4>";
+        var msg = "<p class='center grey bigger-120'><i class='ace-icon fa fa-hand-o-right blue'></i>" + 
+                " Apakah anda yakin akan memvalidasi <br/><b>" + name + "</b> ? </p>";
+        bootbox.confirm({
+            title: title,
+            message: msg, 
+            buttons: {
+                cancel: {
+                    label: "<i class='ace-icon fa fa-times bigger-110'></i> Batal",
+                    className: "btn btn-sm"
+                },
+                confirm: {
+                    label: "<i class='ace-icon fa fa-check bigger-110'></i> Ya, Validasi",
+                    className: "btn btn-sm btn-success"
+                }
+            },
+            callback: function(result) {
+                if (result === true) {
+                    valid_data(id, '1');
+                }
+            }
+        });
+    });
+    $(document.body).on("click", "#reload-btn", function(event) {
+        var id = $(this).attr("itemid");
+        var name = $(this).attr("itemname");
+        var title = "<h4 class='red center'><i class='ace-icon fa fa-exclamation-triangle red'></i>" + 
+                " Peringatan !</h4>";
+        var msg = "<p class='center grey bigger-120'><i class='ace-icon fa fa-hand-o-right blue'></i>" + 
+                " Apakah anda yakin akan membatalkan memvalidasi <br/><b>" + name + "</b> ? </p>";
+        bootbox.confirm({
+            title: title,
+            message: msg, 
+            buttons: {
+                cancel: {
+                    label: "<i class='ace-icon fa fa-times bigger-110'></i> Batal",
+                    className: "btn btn-sm"
+                },
+                confirm: {
+                    label: "<i class='ace-icon fa fa-check bigger-110'></i> Ya, Batalkan Validasi",
+                    className: "btn btn-sm btn-danger"
+                }
+            },
+            callback: function(result) {
+                if (result === true) {
+                    valid_data(id, '0');
+                }
+            }
+        });
+    });
+    function valid_data(id, status){
+        var title = '<h4 class="blue center"><i class="ace-icon fa fa fa-spin fa-spinner"></i>' +
+                ' Mohon tunggu . . . </h4>';
+        var msg = '<p class="center red bigger-120"><i class="ace-icon fa fa-hand-o-right blue"></i>' +
+                ' Jangan menutup atau me-refresh halaman ini, silahkan tunggu sampai peringatan ini tertutup sendiri. </p>';
+        var progress = bootbox.dialog({
+            title: title,
+            message: msg,
+            closeButton: false
+        });
+        $.ajax({
+            url: module + "/ajax/type/action/source/valid",
+            dataType: "json",
+            type: "POST",
+            data: {
+                id: id,
+                status: status
+            },
+            success: function (rs) {
+                progress.modal("hide");
+                if (rs.status) {
+                    myNotif('Informasi', rs.msg, 1);
+                } else {
+                    myNotif('Peringatan', rs.msg, 2);
+                }
+                table.fnDraw();
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                progress.modal("hide");
+                myNotif('Error', 'Kesalahan jaringan. Mohon ulangi proses', 3);
+            }
+        });
+    }
     function load_table() {
         table = $("#dynamic-table")
         .dataTable({
-            orderCellsTop: true,
-            fixedHeader: true,
             bScrollCollapse: true,
             bAutoWidth: false,
             bProcessing: true,
             bServerSide: true,
             ajax: {
-                url: module + "/ajax/type/table/source/mhs",
+                url: module + "/ajax/type/table/source/data",
                 type: "POST",
                 dataType: "json",
                 data: function (val) {
-                    val.prodi = $("#prodi").val();
-                    val.tahun = $("#tahun").val();
+                    val.kerja = $("#kerja").val();
+                    val.lokasi = $("#lokasi").val();
                     val.status = $("#status").val();
-                    val.akm = $("#akm").val();
                 }
             },
             aaSorting: [],
             aoColumnDefs: [
-                {bSortable: false, aTargets: [0,6]},
-                {bSearchable: false, aTargets: [0,6]},
-                {sClass: "center", aTargets: [0, 1, 2, 3, 4, 5]},
-                {sClass: "center nowrap", aTargets: [6]}
+                {bSortable: false, aTargets: [0,7]},
+                {bSearchable: false, aTargets: [0,7]},
+                {sClass: "center", aTargets: [0, 1, 2, 3, 4, 5, 6]},
+                {sClass: "center nowrap", aTargets: [7]}
             ],
             oLanguage: {
                 sSearch: "Cari : ",

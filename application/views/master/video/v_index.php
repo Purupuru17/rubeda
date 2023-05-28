@@ -18,15 +18,14 @@ $this->load->view('sistem/v_breadcrumb');
         <div class="col-xs-12">
             <form id="search-form" name="form" class="form-horizontal" method="POST">
                 <div class="form-group">
-                    <label class="control-label col-xs-12 col-sm-2 no-padding-right">Periode :</label>
+                    <label class="control-label col-xs-12 col-sm-2 no-padding-right">Topik :</label>
                     <div class="col-xs-12 col-sm-3">
                         <div class="clearfix">
-                            <select class="select2 width-100" name="periode" id="periode" data-placeholder="------> Pilih Periode <------">
+                            <select class="select2 width-100" name="topik" id="topik" data-placeholder="------> Pilih Topik <------">
                                 <option value=""> </option>
                                 <?php
-                                foreach ($semester['data'] as $val) {
-                                    $selected = ($this->session->userdata('idsmt') == $val['id_semester']) ? 'selected' : '';
-                                    echo '<option value="'.encode($val['id_semester']).'" '.$selected.'>'.$val['nama_semester'].'</option>';
+                                foreach ($topik as $value) {
+                                    echo '<option value="'.encode($value['id_topik']).'">'.$value['judul_topik'].'</option>';
                                 }
                                 ?>
                             </select>
@@ -34,43 +33,25 @@ $this->load->view('sistem/v_breadcrumb');
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="control-label col-xs-12 col-sm-2 no-padding-right">Program Studi :</label>
+                    <label class="control-label col-xs-12 col-sm-2 no-padding-right">Privasi :</label>
                     <div class="col-xs-12 col-sm-3">
                         <div class="clearfix">
-                            <select class="select2 width-100" name="prodi" id="prodi" data-placeholder="------> Pilih Program Studi <------">
+                            <select class="select2 width-100" name="privasi" id="privasi" data-placeholder="------> Pilih Privasi <------">
                                 <option value=""> </option>
-                                <?php
-                                foreach ($prodi['data'] as $val) {
-                                    echo '<option value="'.encode($val['id_prodi']).'">'.$val['nama_prodi'].'</option>';
-                                }
-                                ?>
+                                <option value="1"> PUBLIC </option>
+                                <option value="2"> PRIVATE </option>
                             </select>
                         </div>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="control-label col-xs-12 col-sm-2 no-padding-right">Semester :</label>
+                    <label class="control-label col-xs-12 col-sm-2 no-padding-right">Status :</label>
                     <div class="col-xs-12 col-sm-2">
                         <div class="clearfix">
-                            <select class="select2 width-100" name="semester" id="semester" data-placeholder="--> Pilih Semester <--">
+                            <select class="select2 width-100" name="status" id="status" data-placeholder="---> Pilih Status <---">
                                 <option value=""> </option>
-                                <?php
-                                foreach (array(1,2,3,4,5,6,7,8) as $val) {
-                                    echo '<option value="' . $val . '" '.$selected.'>' . $val . '</option>';
-                                }
-                                ?>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label col-xs-12 col-sm-2 no-padding-right">Dosen :</label>
-                    <div class="col-xs-12 col-sm-2">
-                        <div class="clearfix">
-                            <select class="select2 width-100" name="praktisi" id="praktisi" data-placeholder="----> Pilih Tipe <----">
-                                <option value=""> </option>
-                                <option value="1"> TETAP </option>
-                                <option value="0"> PRAKTISI </option>
+                                <option value="1"> AKTIF </option>
+                                <option value="0"> TIDAK AKTIF </option>
                             </select>
                         </div>
                     </div>
@@ -92,13 +73,6 @@ $this->load->view('sistem/v_breadcrumb');
                         <i class="ace-icon fa fa-list"></i>
                         <?= $title[1] ?>
                     </h5>
-                    <div class="widget-toolbar no-border">
-                        <div class="btn-group btn-overlap">
-                            <a href="<?= site_url($module.'/add') ?>" class="btn btn-white btn-primary btn-bold">
-                                <i class="fa fa-plus-square bigger-120 blue"></i> Tambah Data
-                            </a>
-                        </div>
-                    </div>
                 </div>
                 <div class="widget-body">
                     <div class="widget-main padding-2 table-responsive">
@@ -106,13 +80,12 @@ $this->load->view('sistem/v_breadcrumb');
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th width="20%">Program Studi</th>
-                                    <th>Mata Kuliah <br/><small class="smaller-70">(Wajib/Pilihan/Khusus)</small></th>
-                                    <th>Bobot MK</th>
-                                    <th>Kelas <br/><small class="smaller-70">(Semester)</small></th>
-                                    <th>Dosen</th>
-                                    <th>Peserta</th>
-                                    <th>Informasi</th>
+                                    <th width="20%">Judul</th>
+                                    <th>Topik</th>
+                                    <th>Privasi</th>
+                                    <th>Batasan Usia</th>
+                                    <th>Channel</th>
+                                    <th>Status</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
@@ -172,10 +145,61 @@ $this->load->view('sistem/v_breadcrumb');
             }
         });
     });
-    $(document.body).on("click", "#check-btn", function(event) {
-        check_kelas($(this).attr("itemid"));
+    $(document.body).on("click", "#valid-btn", function(event) {
+        var id = $(this).attr("itemid");
+        var name = $(this).attr("itemname");
+        var title = "<h4 class='red center'><i class='ace-icon fa fa-exclamation-triangle red'></i>" + 
+                " Peringatan !</h4>";
+        var msg = "<p class='center grey bigger-120'><i class='ace-icon fa fa-hand-o-right blue'></i>" + 
+                " Apakah anda yakin akan memvalidasi <br/><b>" + name + "</b> ? </p>";
+        bootbox.confirm({
+            title: title,
+            message: msg, 
+            buttons: {
+                cancel: {
+                    label: "<i class='ace-icon fa fa-times bigger-110'></i> Batal",
+                    className: "btn btn-sm"
+                },
+                confirm: {
+                    label: "<i class='ace-icon fa fa-check bigger-110'></i> Ya, Validasi",
+                    className: "btn btn-sm btn-success"
+                }
+            },
+            callback: function(result) {
+                if (result === true) {
+                    valid_data(id, '1');
+                }
+            }
+        });
     });
-    function check_kelas(id){
+    $(document.body).on("click", "#reload-btn", function(event) {
+        var id = $(this).attr("itemid");
+        var name = $(this).attr("itemname");
+        var title = "<h4 class='red center'><i class='ace-icon fa fa-exclamation-triangle red'></i>" + 
+                " Peringatan !</h4>";
+        var msg = "<p class='center grey bigger-120'><i class='ace-icon fa fa-hand-o-right blue'></i>" + 
+                " Apakah anda yakin akan membatalkan memvalidasi <br/><b>" + name + "</b> ? </p>";
+        bootbox.confirm({
+            title: title,
+            message: msg, 
+            buttons: {
+                cancel: {
+                    label: "<i class='ace-icon fa fa-times bigger-110'></i> Batal",
+                    className: "btn btn-sm"
+                },
+                confirm: {
+                    label: "<i class='ace-icon fa fa-check bigger-110'></i> Ya, Batalkan Validasi",
+                    className: "btn btn-sm btn-danger"
+                }
+            },
+            callback: function(result) {
+                if (result === true) {
+                    valid_data(id, '0');
+                }
+            }
+        });
+    });
+    function valid_data(id, status){
         var title = '<h4 class="blue center"><i class="ace-icon fa fa fa-spin fa-spinner"></i>' +
                 ' Mohon tunggu . . . </h4>';
         var msg = '<p class="center red bigger-120"><i class="ace-icon fa fa-hand-o-right blue"></i>' +
@@ -186,11 +210,12 @@ $this->load->view('sistem/v_breadcrumb');
             closeButton: false
         });
         $.ajax({
-            url: module + "/ajax/type/list/source/check",
+            url: module + "/ajax/type/action/source/valid",
             dataType: "json",
             type: "POST",
             data: {
-                id: id
+                id: id,
+                status: status
             },
             success: function (rs) {
                 progress.modal("hide");
@@ -219,18 +244,17 @@ $this->load->view('sistem/v_breadcrumb');
                 type: "POST",
                 dataType: "json",
                 data: function (val) {
-                    val.periode = $("#periode").val();
-                    val.prodi = $("#prodi").val();
-                    val.semester = $("#semester").val();
-                    val.praktisi = $("#praktisi").val();
+                    val.topik = $("#topik").val();
+                    val.privasi = $("#privasi").val();
+                    val.status = $("#status").val();
                 }
             },
             aaSorting: [],
             aoColumnDefs: [
-                {bSortable: false, aTargets: [0,8]},
-                {bSearchable: false, aTargets: [0,8]},
-                {sClass: "center", aTargets: [0, 1, 3, 4, 5, 6, 7]},
-                {sClass: "center nowrap", aTargets: [2,8]}
+                {bSortable: false, aTargets: [0,7]},
+                {bSearchable: false, aTargets: [0,7]},
+                {sClass: "center", aTargets: [0, 1, 2, 3, 4, 5, 6]},
+                {sClass: "center nowrap", aTargets: [7]}
             ],
             oLanguage: {
                 sSearch: "Cari : ",
