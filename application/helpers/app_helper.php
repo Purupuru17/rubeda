@@ -307,6 +307,9 @@ if (!function_exists('encode')) {
 if (!function_exists('decode')) {
 
     function decode($param, $url_safe = TRUE) {
+        if(is_null($param) || $param == '' ){
+            return '';
+        }
         $CI = &get_instance();
         $secret_key = $CI->config->item('encryption_key');
         $secret_iv = $CI->config->item('encrypt_iv');

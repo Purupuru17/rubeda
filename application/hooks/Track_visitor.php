@@ -60,7 +60,7 @@ class Track_Visitor {
                 $proceed = FALSE;
             }
             foreach ($this->CONTROLLER_IGNORE_LIST as $controller) {
-                if (strpos(trim($this->ci->uri->segment(1)), $controller) !== FALSE) {
+                if (strpos(trim((string)$this->ci->uri->segment(1)), $controller) !== FALSE) {
                     $proceed = FALSE;
                     break;
                 }

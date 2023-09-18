@@ -39,7 +39,7 @@
                         <h6>Tags :</h6>
                         <p class="tags mb-0">
                             <?php
-                            $tag_arr = explode(',', $detail['tag_video']);
+                            $tag_arr = explode(',', $detail['tag_video'] ?? '');
                             for ($i=0; $i < count($tag_arr); $i++) {
                                 echo '<span><a href="#">'.$tag_arr[$i].'</a></span> ';
                             }
@@ -111,7 +111,6 @@
                     $(".txt-view").html('<i class="fas fa-eye"></i> '+ rs.data.viewed +' views');
                     $(".btn-status").html(rs.data.btn_subs + ' ' + rs.data.btn_like);
                 }
-                console.log(rs);
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 console.log('Failed fetch data from server');

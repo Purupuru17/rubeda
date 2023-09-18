@@ -187,14 +187,12 @@ class Home extends KZ_Controller {
         $value = $this->input->post('value');
         $progress = '';
             
-        $this->db->select('v.*, t.*, COUNT(r.video_id) as viewed')->from('m_video v')
+        $this->db->select('v.*, t.*, COUNT(r.video_id) as viewed, COUNT(l.video_id) as liked')->from('m_video v')
             ->join('m_topik t', 'v.topik_id = t.id_topik', 'inner')->join('fk_like l', 'l.video_id = v.id_video', 'left')
             ->join('fk_riwayat r', 'r.video_id = v.id_video', 'left')->where(array('v.status_video' => '1', 'v.privasi_video' => '1'));
         if(!empty($type)){
             if($type == 'riwayat'){
                 $this->db->where(array('r.user_id' => $this->sessionid));
-                $rand = (int) random_string('numeric',2);
-                $progress = '<div class="progress"><div class="progress-bar" role="progressbar" style="width: '.$rand.'%;">'.$rand.' %</div></div>';
             }else if($type == 'like'){
                 $this->db->where(array('l.user_id' => $this->sessionid, 'l.status_like' => '1'));
             }else if($type == 'profil'){
@@ -230,6 +228,8 @@ class Home extends KZ_Controller {
         $content = '';
         foreach ($get->result_array() as $item) {
             $liked = $this->db->get_where('fk_like', array('video_id' => $item['id_video'], 'status_like' => '1'))->num_rows();
+            $rand = (int) random_string('numeric',2);
+            $progress = ($type == 'riwayat') ? '<div class="progress"><div class="progress-bar" role="progressbar" style="width: '.$rand.'%;">'.$rand.' %</div></div>' : '';
             
             $col = ($type == 'video') ? 'col-md-12' : 'col-xl-3 col-sm-6 mb-3';
             $card = ($type == 'video') ? 'video-card-list' : 'history-video';

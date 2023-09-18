@@ -20,7 +20,7 @@ if (!function_exists('ctk')) {
 
     function ctk($string, $format = NULL) {
 
-        $hasil = strip_tags(html_entity_decode($string));
+        $hasil = strip_tags(html_entity_decode($string ?? ''));
         if(!is_null($format)){
             $hasil = htmlentities($string, ENT_QUOTES); 
         }
