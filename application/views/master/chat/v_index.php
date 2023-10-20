@@ -65,6 +65,11 @@ $this->load->view('sistem/v_breadcrumb');
         $('[data-rel="tooltip"]').tooltip({placement: 'top'});
         get_room();
         get_user();
+        
+        setInterval(function() {
+            get_room();
+            console.log('Fetch new notification');
+        }, 10000);
     });
     $(document.body).on("click", "#restart-btn", function(event) {
         var id = $(this).attr("itemid");
@@ -96,7 +101,7 @@ $this->load->view('sistem/v_breadcrumb');
             },
             callback: function(result) {
                 if (result === true) {
-                    start_chat(id);
+                    start_room(id);
                 }
             }
         });
@@ -115,7 +120,6 @@ $this->load->view('sistem/v_breadcrumb');
                 $(".room-item").remove();
                 if(rs.status) {
                     $("#room-item").html(rs.data);
-                    //$(rs.data).insertAfter("#room-item");
                 }
             },
             error: function (xhr, ajaxOptions, thrownError) {
@@ -140,6 +144,37 @@ $this->load->view('sistem/v_breadcrumb');
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 $(".is-loading2").addClass("hide");
+                console.log('Failed fetch data from server');
+            }
+        });
+    }
+    function start_room(id){
+        var title = '<h4 class="blue center"><i class="ace-icon fa fa fa-spin fa-spinner"></i>' +
+                ' Mohon tunggu . . . </h4>';
+        var msg = '<p class="center red bigger-120"><i class="ace-icon fa fa-hand-o-right blue"></i>' +
+                ' Jangan menutup atau me-refresh halaman ini, silahkan tunggu sampai peringatan ini tertutup sendiri. </p>';
+        var progress = bootbox.dialog({title: title, message: msg, closeButton: false });
+        $.ajax({
+            url: module + "/ajax/type/action/source/room",
+            dataType: "json",
+            type: "POST",
+            data: {
+                id: id
+            },
+            success: function (rs) {
+                if (rs.status) {
+                    setInterval(function() {
+                        progress.modal("hide");
+                        window.location.replace(module + "/add/" + rs.data);
+                    }, 2000);
+                    myNotif('Informasi', rs.msg, 1);
+                } else {
+                    progress.modal("hide");
+                    myNotif('Peringatan', rs.msg, 2);
+                }
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                progress.modal("hide");
                 console.log('Failed fetch data from server');
             }
         });

@@ -102,7 +102,7 @@ if (!function_exists('st_file')) {
             $rs .= is_null($file) ? '' : $down;
         }else{
             if(is_file($src)){
-                $rs = '<i class="bigger-120 fa fa-check green"></i>';
+                $rs = '';//'<i class="bigger-120 fa fa-check green"></i>';
                 $rs .= is_null($file) ? '' : $down;
             }
         }

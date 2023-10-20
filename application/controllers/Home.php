@@ -68,7 +68,7 @@ class Home extends KZ_Controller {
         $user['ip_user'] = ip_agent();
         
         $data['user_id'] = $user['id_user'];
-        $data['id_creator'] = random_string('unique');
+        $data['id_creator'] = $user['id_user'];//random_string('unique');
         $data['nama_creator'] = $user['fullname'];
         $data['usia_creator'] = $this->input->post('usia');
         $data['telepon_creator'] = $user['username'];

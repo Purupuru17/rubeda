@@ -84,9 +84,9 @@ switch(ENVIRONMENT) {
         $pass_default= 'BCI+k=NCsYDM';
         break;
     case 1 :
-        $dsn_default = 'mysql:host=app-db;dbname=rubeda_db';
+        $dsn_default = 'mysql:host=localhost;dbname=rubeda_db';
         $user_default= 'root';
-        $pass_default= 'root';
+        $pass_default= 'unimuda';
         break;
     default:
         exit('Please Specify Database environment');

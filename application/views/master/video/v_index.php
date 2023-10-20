@@ -58,7 +58,7 @@ $this->load->view('sistem/v_breadcrumb');
                 </div>
                 <div class="form-group">
                     <div class="col-md-offset-2 col-md-6">
-                        <button class="btn btn-primary btn-white" name="cari" id="btn-search" type="button">
+                        <button class="btn btn-primary btn-white btn-bold" name="cari" id="btn-search" type="button">
                             <i class="ace-icon fa fa-search-plus"></i>
                             Pencarian
                         </button>

@@ -22,10 +22,8 @@
             <?= $this->session->flashdata('notif'); ?>
         </div>
         <div class="col-xs-12">
-            <h3 class="lighter center block blue"><?= $title[1] ?> <?= $this->session->userdata('namasmt') ?></h3>
+            <h3 class="lighter center block blue"><?= $title[1] ?></h3>
             <form id="validation-form" action="<?= site_url($action); ?>" name="form" class="form-horizontal" method="POST" enctype="multipart/form-data">
-                <input value="<?= $edit['kode_matkul'] ?>" type="hidden" name="kode" id="kode">
-                <input value="<?= $edit['nama_matkul'] ?>" type="hidden" name="namamk" id="namamk">
                 <div class="form-group <?= empty($edit['id_kelas']) ? '' : 'hide' ?>">
                     <label class="control-label col-xs-12 col-sm-4 no-padding-right">Program Studi :</label>
                     <div class="col-xs-12 col-sm-4">

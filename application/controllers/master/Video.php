@@ -8,6 +8,8 @@ class Video extends KZ_Controller {
                 
     function __construct() {
         parent::__construct();
+        
+        $this->_creator_id();
         $this->load->model(array('m_video'));
     }
     function index() {
@@ -26,6 +28,7 @@ class Video extends KZ_Controller {
             redirect($this->module);
         }
         $this->data['edit'] = $this->m_video->getId(decode($id));
+        $this->data['topik'] = $this->db->get('m_topik')->result_array();
         
         $this->data['module'] = $this->module;
         $this->data['action'] = $this->module_do.'/edit/'.$id;
@@ -64,10 +67,6 @@ class Video extends KZ_Controller {
             if($routing_module['source'] == 'data') {
                 $this->_table_data();//index
             }
-        }else if($routing_module['type'] == 'action') {
-            if($routing_module['source'] == 'valid') {
-                $this->_valid_data();
-            }
         }
     }
     //function
@@ -77,6 +76,9 @@ class Video extends KZ_Controller {
         $privasi = $this->input->post('privasi');
         
         $where = null;
+        if(!empty($this->cid)){
+            $where['creator_id'] = $this->cid;
+        }
         if ($status != '') {
             $where['status_video'] = $status;
         }
@@ -94,19 +96,11 @@ class Video extends KZ_Controller {
             $no++;
             $row = array();
             
-            $is_valid = ($items['status_video'] != '0') ? '<button id="reload-btn" itemid="'. encode($items['id_video']) .'" itemname="'. ctk($items['judul_video']) .'" 
-                            class="tooltip-warning btn btn-white btn-warning btn-sm btn-round" data-rel="tooltip" title="Batalkan Validasi">
-                            <span class="orange"><i class="ace-icon fa fa-times bigger-120"></i></span>
-                        </button>' : '<button id="valid-btn" itemid="'. encode($items['id_video']) .'" itemname="'. ctk($items['judul_video']) .'" 
-                            class="tooltip-success btn btn-white btn-success btn-sm btn-round" data-rel="tooltip" title="Validasi Data">
-                            <span class="green"><i class="ace-icon fa fa-check-square-o bigger-120"></i></span>
-                        </button>';
             $aksi = '<div class="action-buttons">
                         <a href="'. site_url($this->module .'/edit/'. encode($items['id_video'])) .'" 
-                            class="hide tooltip-warning btn btn-white btn-warning btn-sm btn-round" data-rel="tooltip" title="Ubah Data">
+                            class="tooltip-warning btn btn-white btn-warning btn-sm btn-round" data-rel="tooltip" title="Ubah Data">
                             <span class="orange"><i class="ace-icon fa fa-pencil-square-o bigger-120"></i></span>
                         </a>
-                        '.$is_valid.'
                         <button itemid="'. encode($items['id_video']) .'" itemname="'. $items['judul_video'] .'" id="delete-btn" 
                             class="tooltip-error btn btn-white btn-danger btn-mini btn-round" data-rel="tooltip" title="Hapus Data">
                             <span class="red"><i class="ace-icon fa fa-trash-o"></i></span>
@@ -132,21 +126,5 @@ class Video extends KZ_Controller {
             "data" => $data,
         );
         jsonResponse($output);
-    }
-    function _valid_data() {
-        $id = decode($this->input->post('id'));
-        $status = $this->input->post('status');
-        
-        $data['status_video'] = $status;
-        $data['update_video'] = date('Y-m-d H:i:s');
-        $data['log_video'] = $this->sessionname.' memvalidasi video';
-        
-        $result = $this->m_video->update($id, $data);
-        if ($result){
-            jsonResponse(array('status' => true, 
-                'msg' => $status == '1' ? 'Data berhasil di validasi. Video sudah di izinkan untuk di tampilkan':'Validasi telah berhasil di batalkan'));
-        } else {
-            jsonResponse(array('status' => false, 'msg' => 'Data gagal di ubah'));
-        }
     }
 }

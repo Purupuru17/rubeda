@@ -6,3 +6,4 @@
 
 Database
 - privasi_video -> m_video
+- read_chat -> m_chat

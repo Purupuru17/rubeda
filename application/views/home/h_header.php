@@ -37,19 +37,20 @@
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="#"><i class="fas fa-fw fa-star "></i> &nbsp; Something else here</a>
             </div>
-        </li>
+        </li>-->
         <li class="nav-item dropdown no-arrow mx-1">
-            <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <i class="fas fa-envelope fa-fw"></i>
-                <span class="badge badge-success">7</span>
+            <a class="nav-link" href="<?= site_url('master/chat') ?>">
+                <i class="fas fa-comments fa-fw"></i>
+                Obrolan
+                <!--<span class="badge badge-success">7</span>-->
             </a>
-            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="messagesDropdown">
+<!--            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="messagesDropdown">
                 <a class="dropdown-item" href="#"><i class="fas fa-fw fa-edit "></i> &nbsp; Action</a>
                 <a class="dropdown-item" href="#"><i class="fas fa-fw fa-headphones-alt "></i> &nbsp; Another action</a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="#"><i class="fas fa-fw fa-star "></i> &nbsp; Something else here</a>
-            </div>
-        </li>-->
+            </div>-->
+        </li>
         <li class="nav-item dropdown no-arrow osahan-right-navbar-user">
             <a class="nav-link dropdown-toggle user-dropdown-link" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <img alt="Profil" src="<?= load_file($this->session->userdata('foto'),1) ?>">

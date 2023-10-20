@@ -14,6 +14,10 @@ class M_chat extends CI_Model {
         $this->db->insert($this->table, $data);
         return $this->db->affected_rows() > 0 ? true : false;
     }
+    function insertRoom($data) {
+        $this->db->insert('m_room', $data);
+        return $this->db->affected_rows() > 0 ? true : false;
+    }
     //UPDATE
     function update($id, $data) {
         if(is_array($id)){
