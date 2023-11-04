@@ -73,12 +73,19 @@
             "frontend/vidoe/vendor/fontawesome-free/css/all.min.css",
             "frontend/vidoe/css/osahan.css",
             "frontend/vidoe/vendor/owl-carousel/owl.carousel.css",
-            "frontend/vidoe/vendor/owl-carousel/owl.theme.css"
+            "frontend/vidoe/vendor/owl-carousel/owl.theme.css",
+
+            "backend/assets/fonts/poppins/font.css?family=Poppins:300,400,500,600,700",
         ));
         load_js(array(
             "frontend/vidoe/vendor/jquery/jquery.min.js"
         ));
         ?>
+        <style>
+            body {
+                font-family: 'Poppins', sans-serif;
+            }
+        </style>
     </head>
     <!-- BEGIN body -->
     <body>

@@ -118,29 +118,29 @@ class Chat extends KZ_Controller {
         $content = '';
         foreach ($get->result_array() as $item) {
             $is_send = '<strong class="blue">'.$item['fullname'].'</strong>'; 
-            $is_chat = 'col-xs-7';
+            $is_chat = 'col-xs-10 col-sm-7';
             $st_read = $st_send = $bg_send = '';
             
             $ext = substr($item['file_chat'], strrpos($item['file_chat'], '.') + 1);
             $file = substr($item['file_chat'], strrpos($item['file_chat'], '/') + 1);
             $is_file = in_array($ext, array('jpg','jpeg','png','JPG','PNG')) ? 
-                '<img class="img-thumbnail lazyload blur-up" width="100%" src="'. base_url($item['file_chat']).'" >' 
+                '<a target="_blank" href="'. base_url($item['file_chat']).'"><img class="img-thumbnail lazyload blur-up" width="100%" src="'. base_url($item['file_chat']).'" ></a>' 
                     : '<strong>'.$file.'</strong> '.st_file($item['file_chat'],1);
             $attach = empty($item['file_chat']) ? '' : $is_file;
             
             if($this->sessionid == $item['user_id']){
                 $is_send = '<strong class="grey">Anda</strong>';
-                $is_chat = 'col-xs-offset-5 col-xs-7';
+                $is_chat = 'col-sm-offset-5 col-sm-7 col-xs-offset-2 col-xs-10';
                 $bg_send = 'style="background: aliceblue;"';
                 $st_send = ($item['status_chat'] == '1') ? 'fa-check-square-o green':'fa-check';
                 $st_read = '<small>'.selisih_wkt($item['read_chat']).'</small>';
             }
             $content .= '<div class="itemdiv dialogdiv '.$is_chat.' chat-item">
-                <div class="user">
+               	 <div class="user hide">
                     <img alt="'.$item['fullname'].'" src="'.load_file('app/img/no-avatar.png').'">
-                </div>
-                <div class="body" '.$bg_send.'>
-                    <div class="time">
+                 </div>
+		 <div class="body" '.$bg_send.'>
+                    <div class="time hide">
                         <i class="ace-icon fa fa-clock-o"></i>
                         <span class="grey">'. selisih_wkt($item['create_chat']).'</span>
                     </div>
@@ -149,7 +149,8 @@ class Chat extends KZ_Controller {
                     <div class="space-6"></div>
                     '.$attach.'
                     <div class="tools">
-                        <i class="icon-only ace-icon fa '.$st_send.'"></i> '.$st_read.'
+                        <i class="icon-only ace-icon fa '.$st_send.'"></i>
+			<small class="grey">'. selisih_wkt($item['create_chat']).'</small>
                     </div>
                 </div>
             </div>';

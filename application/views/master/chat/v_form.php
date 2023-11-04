@@ -1,6 +1,15 @@
 <?php
 $this->load->view('sistem/v_breadcrumb');
 ?>
+<style>
+    .itemdiv.dialogdiv:before {
+        border: none;
+        background-color: white;
+    }
+    .itemdiv > .body {
+        margin-left: 2px;
+    }
+</style>
 <div class="page-content">
     <div class="page-header">
         <h1>
@@ -42,9 +51,12 @@ $this->load->view('sistem/v_breadcrumb');
                         <form id="chat-form" method="POST" enctype="multipart/form-data">
                             <input value="<?= encode($detail['id_room']) ?>" name="id" type="hidden">
                             <div class="form-actions">
-                                <div class="input-group">
-                                    <input name="message" id="message" placeholder="Ketik pesan anda disini ..." type="text" class="form-control">
-                                    <span class="input-group-btn">
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-9">
+                                        <textarea name="message" id="message" placeholder="Ketik pesan anda disini ..." class="form-control"></textarea>
+                                        <div class="space-2"></div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-3">
                                         <button onclick="send_chat()" id="btn-kirim" class="btn btn-sm btn-success no-radius" type="button">
                                             <i class="ace-icon fa fa-paper-plane"></i>
                                             Kirim
@@ -53,7 +65,7 @@ $this->load->view('sistem/v_breadcrumb');
                                             <i class="ace-icon fa fa-paperclip"></i>
                                             Lampirkan
                                         </button>
-                                    </span>
+                                    </div>
                                 </div>
                             </div>
                         </form>
@@ -208,6 +220,11 @@ $this->load->view('sistem/v_breadcrumb');
         });
     }
     form.submit(function(e){
+	let file = $("#attach").val();
+        if(file === '' || file === null){
+            myNotif('Informasi', 'Lampiran masih kosong', 2);
+            return false;
+        }
         e.preventDefault();
         $.ajax({
             url: module + "/ajax/type/action/source/attach",

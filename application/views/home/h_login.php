@@ -73,7 +73,9 @@
             "frontend/vidoe/vendor/fontawesome-free/css/all.min.css",
             "frontend/vidoe/css/osahan.css",
             "frontend/vidoe/vendor/owl-carousel/owl.carousel.css",
-            "frontend/vidoe/vendor/owl-carousel/owl.theme.css"
+            "frontend/vidoe/vendor/owl-carousel/owl.theme.css",
+
+            "backend/assets/fonts/poppins/font.css?family=Poppins:300,400,500,600,700",
         ));
         ?>
         <?php
@@ -81,6 +83,16 @@
             "frontend/vidoe/vendor/jquery/jquery.min.js",
         ));
         ?>
+        <style>
+            body {
+                font-family: 'Poppins', sans-serif;
+            }
+            .bg-doktor{
+                background: url('<?= base_url('app/img/bg-doktor.png') ?>');
+                background-position: center;
+                background-size: cover;
+            }
+        </style>
     </head>
     <body class="login-main-body">
         <section class="login-main-wrapper">
@@ -115,28 +127,28 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-7">
+                    <div class="col-md-7 bg-doktor">
                         <div class="login-main-right bg-white p-5 mt-5 mb-5">
                             <div class="owl-carousel owl-carousel-login">
                                 <div class="item">
                                     <div class="carousel-login-card text-center">
-                                        <img src="img/login.png" class="img-fluid" alt="LOGO">
+                                        <img src="<?= load_file('app/img/slide1.png') ?>" class="img-fluid" alt="Slide1">
                                         <h5 class="mt-5 mb-3">​Watch videos offline</h5>
-                                        <p class="mb-4">when an unknown printer took a galley of type and scrambled<br> it to make a type specimen book. It has survived not <br>only five centuries</p>
+                                        <!--<p class="mb-4">when an unknown printer took a galley of type and scrambled<br> it to make a type specimen book. It has survived not <br>only five centuries</p>-->
                                     </div>
                                 </div>
                                 <div class="item">
                                     <div class="carousel-login-card text-center">
-                                        <img src="img/login.png" class="img-fluid" alt="LOGO">
+                                        <img src="<?= load_file('app/img/slide2.png') ?>" class="img-fluid" alt="Slide2">
                                         <h5 class="mt-5 mb-3">Download videos effortlessly</h5>
-                                        <p class="mb-4">when an unknown printer took a galley of type and scrambled<br> it to make a type specimen book. It has survived not <br>only five centuries</p>
+                                        <!--<p class="mb-4">when an unknown printer took a galley of type and scrambled<br> it to make a type specimen book. It has survived not <br>only five centuries</p>-->
                                     </div>
                                 </div>
                                 <div class="item">
                                     <div class="carousel-login-card text-center">
-                                        <img src="img/login.png" class="img-fluid" alt="LOGO">
+                                        <img src="<?= load_file('app/img/slide3.png') ?>" class="img-fluid" alt="Slide3">
                                         <h5 class="mt-5 mb-3">Create GIFs</h5>
-                                        <p class="mb-4">when an unknown printer took a galley of type and scrambled<br> it to make a type specimen book. It has survived not <br>only five centuries</p>
+                                        <!--<p class="mb-4">when an unknown printer took a galley of type and scrambled<br> it to make a type specimen book. It has survived not <br>only five centuries</p>-->
                                     </div>
                                 </div>
                             </div>

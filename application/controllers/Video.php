@@ -158,7 +158,7 @@ class Video extends KZ_Controller {
         
         $data['slug_video'] = url_title($data['judul_video'], 'dash', true);
         $data['creator_id'] = $this->cid;
-        $data['status_video'] = '0';
+        $data['status_video'] = ($this->sessionlevel == '1') ? '1' : '0';
         $data['create_video'] = date('Y-m-d H:i:s');
         $data['log_video'] = $this->sessionname.' menambahkan video baru';
         //check slug
@@ -176,7 +176,7 @@ class Video extends KZ_Controller {
         $cfg['file_name'] = $data['slug_video'];
         $cfg['upload_path'] = './'.$this->path.'/video/';
         $cfg['allowed_types'] = 'mp4';
-        $cfg['max_size'] = 500000;
+        $cfg['max_size'] = 2000000;
         $cfg['remove_spaces'] = true;
         $this->upload->initialize($cfg);
         //do upload

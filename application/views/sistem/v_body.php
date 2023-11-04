@@ -140,7 +140,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             ));
         ?>
         <!--<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>-->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/UpUp/1.0.0/upup.min.js"></script>
+        <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/UpUp/1.0.0/upup.min.js"></script> -->
         <script async type="text/javascript">
            $(function() {
                 const filesToCache = [
@@ -184,13 +184,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     'app/backend/assets/js/ace/ace.settings-skin.js',
                     'app/backend/assets/js/ace/ace.widget-on-reload.js'
                 ];
-                UpUp.start({
-                    'cache-version': '<?= SW_VERSION ?>',
-                    'content-url': '<?= site_url() ?>',
-                    'content': 'No Internet Connection',
-                    'service-worker-url': "<?= base_url('sw.js') ?>",
-                    'assets': filesToCache
-                });
+                // UpUp.start({
+                //     'cache-version': '<?= SW_VERSION ?>',
+                //     'content-url': '<?= site_url() ?>',
+                //     'content': 'No Internet Connection',
+                //     'service-worker-url': "<?= base_url('sw.js') ?>",
+                //     'assets': filesToCache
+                // });
             });
         </script>
         <script type="text/javascript">
