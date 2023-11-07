@@ -3,6 +3,7 @@
 - Edit video
 - Edit channel
 - Chat room
+- cek umur sblm lihat video
 
 Database
 - privasi_video -> m_video

@@ -112,7 +112,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label>Nomor Telepon</label>
-                                    <input required="" name="telepon" type="text" class="form-control" placeholder="Masukkan Nomor Telepon Aktif">
+                                    <input required="" name="telepon" type="number" class="form-control" placeholder="Masukkan Nomor Telepon Aktif">
                                 </div>
                                 <div class="form-group">
                                     <label>Usia</label>

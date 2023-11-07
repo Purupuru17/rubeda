@@ -222,12 +222,6 @@ if (!function_exists('load_array')) {
                     'MALAMOJA','MAGATARUM','MALAJAPA','MALASIGIT','Masjid Baitul Rahim','Gereja Santo Antonius Padua'
                 );
                 break;
-            case 'st_mhs':
-                $val = array(
-                    'AKTIF','LULUS','LAINNYA','MUTASI',
-                    'DIKELUARKAN','WAFAT','PUTUS SEKOLAH','MENGUNDURKAN DIRI','HILANG','TIDAK AKTIF'
-                );
-                break;
             case 'st_usia':
                 $val = array(
                     array('id' => 0, 'txt' => 'UMUM'),array('id' => 1, 'txt' => 'DEWASA'),
@@ -239,9 +233,9 @@ if (!function_exists('load_array')) {
                     array('id' => '1', 'txt' => 'AKTIF'),array('id' => '0', 'txt' => 'TIDAK AKTIF')
                 );
                 break;
-            case 'st_calon':
+            case 'st_privasi':
                 $val = array(
-                    'SEMINAR','UJIAN','YUDISIUM','WISUDA'
+                    array('id' => '1', 'txt' => 'PUBLIC'),array('id' => '2', 'txt' => 'PRIVATE'),array('id' => '0', 'txt' => 'OFFLINE')
                 );
                 break;
             case 'tahun':
@@ -253,27 +247,6 @@ if (!function_exists('load_array')) {
             case 'status':
                 $val = array(
                     'PENDING','AKTIF', 'PROSES' ,'SELESAI', 'TIDAK AKTIF'
-                );
-                break;
-            case 'nilai':
-                $val = array(
-                    array('huruf'=>'A','angka'=>4),array('huruf'=>'A-','angka'=>3.75),array('huruf'=>'AB','angka'=>3.5),
-                    array('huruf'=>'B+','angka'=>3.25),array('huruf'=>'B','angka'=>3),array('huruf'=>'B-','angka'=>2.75),
-                    array('huruf'=>'BC','angka'=>2.5),array('huruf'=>'C+','angka'=>2.25),array('huruf'=>'C','angka'=>2),
-                    array('huruf'=>'C-','angka'=>1.75),array('huruf'=>'CD','angka'=>1.5),array('huruf'=>'D+','angka'=>1.25),
-                    array('huruf'=>'D','angka'=>1),array('huruf'=>'E','angka'=>0)
-                );
-                break;
-            case 'magang':
-                $val = array(
-//                    'Asistensi Mengajar','Magang I', 'Magang II','Magang III','PKL','KPM'
-                    'REGULAR','KERJASAMA'
-                );
-                break;
-            case 'tempat':
-                $val = array(
-//                    'Sekolah Negeri','Sekolah Swasta', 'Kelurahan' ,'Kampung', 'Perusahaan', 'Dinas', 'Usaha Rumahan'
-                    'Kecamatan','Kelurahan','Kampung','Desa','Perusahaan', 'Dinas'
                 );
                 break;
         }

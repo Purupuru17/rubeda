@@ -19,6 +19,14 @@ class Channel extends KZ_Controller {
         );
         $this->load_view('master/channel/v_index', $this->data);
     }
+    function add($id = NULL) {
+        if(empty(decode($id))){
+            redirect($this->module);
+        }
+        $this->session->set_userdata(array('cid' => decode($id)));
+        $this->session->set_flashdata('notif', notif('success', 'Informasi', $this->sessionname.' terhubung akun creator'));
+        redirect($this->module);
+    }
     function edit($id = NULL) {
         if(empty(decode($id))){
             redirect($this->module);
@@ -106,9 +114,9 @@ class Channel extends KZ_Controller {
                             <span class="green"><i class="ace-icon fa fa-check-square-o bigger-120"></i></span>
                         </button>';
             $aksi = '<div class="action-buttons">
-                        <a href="'. site_url($this->module .'/edit/'. encode($items['id_creator'])) .'" 
-                            class="hide tooltip-warning btn btn-white btn-warning btn-sm btn-round" data-rel="tooltip" title="Ubah Data">
-                            <span class="orange"><i class="ace-icon fa fa-pencil-square-o bigger-120"></i></span>
+                        <a href="'. site_url($this->module .'/add/'. encode($items['id_creator'])) .'" 
+                            class="tooltip-default btn btn-white btn-default btn-sm btn-round" data-rel="tooltip" title="Change Data">
+                            <span class="grey"><i class="ace-icon fa fa-refresh bigger-120"></i></span>
                         </a>
                         '.$is_valid.'
                         <button itemid="'. encode($items['id_creator']) .'" itemname="'. $items['nama_creator'] .'" id="delete-btn" 

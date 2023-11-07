@@ -24,79 +24,16 @@
         <div class="col-xs-12">
             <h3 class="lighter center block blue"><?= $title[1] ?></h3>
             <form id="validation-form" action="<?= site_url($action); ?>" name="form" class="form-horizontal" method="POST" enctype="multipart/form-data">
-                <div class="form-group <?= empty($edit['id_kelas']) ? '' : 'hide' ?>">
-                    <label class="control-label col-xs-12 col-sm-4 no-padding-right">Program Studi :</label>
-                    <div class="col-xs-12 col-sm-4">
-                        <div class="clearfix">
-                            <select class="select2 width-100" name="prodi" id="prodi" data-placeholder="------> Pilih Program Studi <------">
-                                <option value=""> </option>
-                                <?php
-                                foreach ($prodi['data'] as $val) {
-                                    $selected = ($edit['prodi_id'] == $val['id_prodi']) ? 'selected' : '';
-                                    echo '<option value="'.encode($val['id_prodi']).'" '.$selected.'>' . $val['nama_prodi'] . '</option>';
-                                }
-                                ?>
-                            </select>
-                        </div>
-                    </div>
-                </div>
                 <div class="form-group">
-                    <label class="control-label col-xs-12 col-sm-4 no-padding-right">Mata Kuliah :</label>
-                    <div class="col-xs-12 col-sm-4">
-                        <div class="clearfix">
-                            <input value="<?= encode($edit['id_matkul']) ?>" type="hidden" name="matkul" id="matkul" placeholder="------> Pilih Mata Kuliah <------" class="width-100"/>
-                        </div>
-                    </div>
-                    <span class="help-inline col-xs-6 col-md-offset-4">
-                        <span class="middle blue bolder" id="txt-matkul"></span>
-                    </span>
-                </div>
-                <div class="form-group">
-                    <label class="control-label col-xs-12 col-sm-4 no-padding-right">Bobot SKS :</label>
-                    <div class="col-xs-12 col-sm-2">
-                        <div class="clearfix">
-                            <input value="<?= $edit['sks_matkul'] ?>" type="number" name="sks" id="sks" placeholder="? sks" class="col-xs-12  col-sm-6"/>
-                        </div>
-                    </div>
-                    <span class="help-inline col-xs-6 col-md-offset-4">
-                        <small class="middle blue"><i>sks tatap muka + sks praktik + sks lainnya</i></small>
-                    </span>
-                </div>
-                <div class="form-group">
-                    <label class="control-label col-xs-12 col-sm-4 no-padding-right">Semester :</label>
-                    <div class="col-xs-12 col-sm-2">
-                        <div class="clearfix">
-                            <select class="select2 width-100" name="semester" id="semester" data-placeholder="--> Pilih Semester <--">
-                                <option value=""> </option>
-                                <?php
-                                $array = str_split($edit['nama_kelas'], 1);
-                                foreach (array(1,2,3,4,5,6,7,8) as $val) {
-                                    $selected = ($edit['semester_kelas'] == $val && element(0, $array) == $val) ? 'selected' : '';
-                                    echo '<option value="' . $val . '" '.$selected.'>' . $val . '</option>';
-                                }
-                                ?>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label col-xs-12 col-sm-4 no-padding-right">Nama Kelas :</label>
+                    <label class="control-label col-xs-12 col-sm-4 no-padding-right">Topik :</label>
                     <div class="col-xs-12 col-sm-3">
                         <div class="clearfix">
-                            <input value="<?= element(1, $array) ?>" type="text" name="nama" id="nama" placeholder="A/B/C/D/E dst" class="col-xs-12  col-sm-6"/>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label col-xs-12 col-sm-4 no-padding-right">Lingkup :</label>
-                    <div class="col-xs-12 col-sm-2">
-                        <div class="clearfix">
-                            <select class="select2 width-100" name="lingkup" id="lingkup" data-placeholder="---> Pilih Lingkup <---">
+                            <select class="select2 width-100" name="topik" id="topik" data-placeholder="------> Pilih Topik <------">
                                 <option value=""> </option>
                                 <?php
-                                foreach ($lingkup as $val) {
-                                    $selected = (1 == $val['id']) ? 'selected' : '';
-                                    echo '<option value="' . $val['id'] . '" '.$selected.'>' . $val['txt'] . '</option>';
+                                foreach ($topik as $val) {
+                                    $selected = ($edit['topik_id'] == $val['id_topik']) ? 'selected' : '';
+                                    echo '<option value="'.encode($val['id_topik']).'" '.$selected.'>' . $val['judul_topik'] . '</option>';
                                 }
                                 ?>
                             </select>
@@ -104,63 +41,22 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="control-label col-xs-12 col-sm-4 no-padding-right">Mode :</label>
+                    <label class="control-label col-xs-12 col-sm-4 no-padding-right">Judul :</label>
+                    <div class="col-xs-12 col-sm-7">
+                        <div class="clearfix">
+                            <input <?= ($this->session->userdata('groupid') != '1' ? 'readonly':'') ?> value="<?= $edit['judul_video'] ?>" type="text" name="judul" id="judul" placeholder="Judul Video" class="col-xs-12  col-sm-6"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-xs-12 col-sm-4 no-padding-right">Batasan Usia :</label>
                     <div class="col-xs-12 col-sm-2">
                         <div class="clearfix">
-                            <select class="select2 width-100" name="mode" id="mode" data-placeholder="---> Pilih Mode <---">
-                                <option value=""> </option>
-                                <?php
-                                foreach ($mode as $val) {
-                                    $selected = ('F' == $val['id']) ? 'selected' : '';
-                                    echo '<option value="' . $val['id'] . '" '.$selected.'>' . $val['txt'] . '</option>';
-                                }
-                                ?>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label col-xs-12 col-sm-4 no-padding-right">Tanggal Mulai :</label>
-                    <div class="col-xs-12 col-sm-3">
-                        <div class="clearfix">
-                            <input value="2023-03-06" type="text" name="mulai" id="mulai" class="col-xs-12  col-sm-6 date-picker" placeholder="Tanggal Mulai" />
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label col-xs-12 col-sm-4 no-padding-right">Tanggal Selesai :</label>
-                    <div class="col-xs-12 col-sm-3">
-                        <div class="clearfix">
-                            <input value="2023-07-24" type="text" name="selesai" id="selesai" class="col-xs-12  col-sm-6 date-picker" placeholder="Tanggal Selesai" />
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label col-xs-12 col-sm-4 no-padding-right">Jenis :</label>
-                    <div class="col-xs-12 col-sm-2">
-                        <div class="clearfix">
-                            <select class="select2 width-100" name="jenis" id="jenis" data-placeholder="---> Pilih Jenis <---">
+                            <select class="select2 width-100" name="usia" id="usia" data-placeholder="---> Pilih Usia <---">
                                 <option value=""> </option>
                                  <?php
-                                foreach (array('WAJIB','PILIHAN','KHUSUS') as $val) {
-                                    $selected = ($edit['jenis_matkul'] == $val) ? 'selected' : '';
-                                    echo '<option value="'.$val.'" '.$selected.'>'.$val.'</option>';
-                                }
-                                ?>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label col-xs-12 col-sm-4 no-padding-right">Status :</label>
-                    <div class="col-xs-12 col-sm-2">
-                        <div class="clearfix">
-                            <select class="select2 width-100" name="status" id="status" data-placeholder="---> Pilih Status <---">
-                                <option value=""> </option>
-                                 <?php
-                                foreach (load_array('st_opsi') as $val) {
-                                    $stt = empty($edit['kuota_kelas']) ? 1:$edit['status_kelas'];
-                                    $selected = ($stt == $val['id']) ? 'selected' : '';
+                                foreach (load_array('st_usia') as $val) {
+                                    $selected = ($edit['usia_video'] == $val['id']) ? 'selected' : '';
                                     echo '<option value="'.$val['id'].'" '.$selected.'>'.$val['txt'].'</option>';
                                 }
                                 ?>
@@ -169,10 +65,60 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="control-label col-xs-12 col-sm-4 no-padding-right">Kuota :</label>
+                    <label class="control-label col-xs-12 col-sm-4 no-padding-right">Pengaturan Privasi :</label>
                     <div class="col-xs-12 col-sm-2">
                         <div class="clearfix">
-                            <input value="<?= empty($edit['kuota_kelas']) ? 35:$edit['kuota_kelas'] ?>" type="number" name="kuota" id="kuota" placeholder="? Mahasiswa" class="col-xs-12  col-sm-6"/>
+                            <select class="select2 width-100" name="privasi" id="privasi" data-placeholder="---> Pilih Privasi <---">
+                                <option value=""> </option>
+                                 <?php
+                                foreach (load_array('st_privasi') as $val) {
+                                    $selected = ($edit['privasi_video'] == $val['id']) ? 'selected' : '';
+                                    echo '<option value="'.$val['id'].'" '.$selected.'>'.$val['txt'].'</option>';
+                                }
+                                ?>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group <?= ($this->session->userdata('groupid') != '1' ? 'hide':'') ?>">
+                    <label class="control-label col-xs-12 col-sm-4 no-padding-right">Status :</label>
+                    <div class="col-xs-12 col-sm-2">
+                        <div class="clearfix">
+                            <select class="select2 width-100" name="status" id="status" data-placeholder="---> Pilih Status <---">
+                                <option value=""> </option>
+                                 <?php
+                                foreach (load_array('st_opsi') as $val) {
+                                    $selected = ($edit['status_video'] == $val['id']) ? 'selected' : '';
+                                    echo '<option value="'.$val['id'].'" '.$selected.'>'.$val['txt'].'</option>';
+                                }
+                                ?>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-xs-12 col-sm-4 no-padding-right">Tag :</label>
+                    <div class="col-xs-12 col-sm-5">
+                        <div class="clearfix">
+                            <input value="<?= $edit['tag_video'] ?>" type="text" name="tag" id="tag" placeholder="Tag Video" class="col-xs-12  col-sm-6"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-xs-12 col-sm-4 no-padding-right">Deskripsi :</label>
+                    <div class="col-xs-12 col-sm-6">
+                        <div class="clearfix">
+                            <textarea cols="1" rows="10" name="deskripsi" id="deskripsi" placeholder="Deskripsi Video" class="col-xs-12"><?= $edit['deskripsi_video'] ?></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-xs-12 col-sm-4 no-padding-right">Terakhir diubah :</label>
+                    <div class="col-xs-12 col-sm-5">
+                        <div class="well">
+                            <span class="bigger-110 blue"><i class="ace-icon fa fa-user"></i> &nbsp;&nbsp;<?= $edit['log_video'] ?></span><br/>
+                            <span class="bigger-110 green"><i class="ace-icon fa fa-pencil"></i> &nbsp;&nbsp;<?= format_date($edit['create_video'],0) ?></span><br/>
+                            <span class="bigger-110 orange"><i class="ace-icon fa fa-clock-o"></i> &nbsp;&nbsp;<?= format_date($edit['update_video'],0) ?></span>
                         </div>
                     </div>
                 </div>
@@ -196,71 +142,23 @@
 </div><!-- /.page-content -->
 <?php
 load_js(array(
-    'backend/assets/js/bootbox.min.js',
     'backend/assets/js/select2.js',
     'backend/assets/js/jquery.validate.js',
-    'backend/assets/js/date-time/bootstrap-datepicker.js'
 ));
 ?>
 <script type="text/javascript">
     const module = "<?= site_url($module) ?>";
-    const module_do = module + "_do";
     const form = $("#validation-form");
-    
     $(document).ready(function () {
         $(".select2").select2({allowClear: true});
-        $(".date-picker").datepicker({ format: 'yyyy-mm-dd',autoclose: true, todayHighlight: true, clearBtn: true });
-        get_select();
     });
-    $("#matkul").change(function () {
-        let data = $("#matkul").select2('data');
-        $("#txt-matkul").html(data.text);
-        $("#kode").val(data.kode);
-        $("#namamk").val(data.nama);
-        $("#sks").val(data.sks);
-    });
-</script>
-<script type="text/javascript">
-    function get_select() {
-        $("#matkul").select2({
-            placeholder: "------> Pilih Mata Kuliah <------",
-            minimumInputLength: 3,
-            allowClear: true,
-            ajax: {
-                url: module + "/ajax/type/list/source/matkul",
-                type: "POST",
-                dataType: 'json',
-                delay: 250,
-                data: function (term) {
-                    return {
-                        term: term,
-                        id: $("#prodi").val()
-                    };
-                },
-                results: function (data) {
-                    return {results: data};
-                },
-                cache: true
-            },
-            initSelection: function(element, callback) {
-                var id = $(element).val();
-                if (id !== "") {
-                    let text = $("#kode").val() + ' - ' +$("#namamk").val() + ' (' +$("#sks").val() + ' sks)'; 
-                    callback({id: id, text: text});
-                }
-            }
-        });
-    }
     form.submit(function(){
         if(form.validate().checkForm()){
-            var title = '<h4 class="blue center"><i class="ace-icon fa fa fa-spin fa-spinner"></i>' +
-            ' Menyimpan Data . . . </h4>';
+            var title = '<h4 class="blue center"><i class="ace-icon fa fa fa-spin fa-spinner"></i> Menyimpan Data . . . </h4>';
             var msg = '<p class="center red bigger-120"><i class="ace-icon fa fa-hand-o-right blue"></i>' +
-                    ' Mohon menunggu, jangan menutup atau me-refresh halaman ini. <br>Silahkan tunggu sampai peringatan ini tertutup sendiri. </p>';
+                ' Mohon menunggu, jangan menutup atau me-refresh halaman ini. <br>Silahkan tunggu sampai peringatan ini tertutup sendiri. </p>';
             bootbox.dialog({
-                title: title,
-                message: msg,
-                closeButton: false
+                title: title, message: msg, closeButton: false
             });
         }
     });
@@ -270,50 +168,29 @@ load_js(array(
         focusInvalid: false,
         ignore: "",
         rules: {
-            prodi: {
+            topik: {
                 required: true
             },
-            matkul: {
-                required: true
-            },
-            sks: {
+            judul: {
                 required: true,
-                digits: true,
-                min: 1,
-                max: 10
-            },
-            jenis: {
-                required: true
-            },
-            semester: {
-                required: true
-            },
-            nama: {
-//                required: true,
-                maxlength: 5
-            },
-            mulai: {
-                date: true,
                 minlength: 5
             },
-            selesai: {
-                date: true,
-                minlength: 5
+            deskripsi: {
+                required: true,
+                minlength: 30
             },
-            lingkup: {
-//                required: true
+            usia: {
+                required: true
             },
-            mode: {
-//                required: true
+            privasi: {
+                required: true
             },
             status: {
                 required: true
             },
-            kuota: {
+            tag: {
                 required: true,
-                digits: true,
-                min: 1,
-                max: 100
+                minlength: 5
             }
         },
         highlight: function (e) {
