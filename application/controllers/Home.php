@@ -188,8 +188,9 @@ class Home extends KZ_Controller {
         $progress = '';
             
         $this->db->select('v.*, t.*, COUNT(r.video_id) as viewed, COUNT(l.video_id) as liked')->from('m_video v')
+            ->join('m_creator c', 'v.creator_id = c.id_creator', 'inner')
             ->join('m_topik t', 'v.topik_id = t.id_topik', 'inner')->join('fk_like l', 'l.video_id = v.id_video', 'left')
-            ->join('fk_riwayat r', 'r.video_id = v.id_video', 'left')->where(array('v.status_video' => '1', 'v.privasi_video' => '1'));
+            ->join('fk_riwayat r', 'r.video_id = v.id_video', 'left')->where(array('v.status_video' => '1', 'v.privasi_video !=' => '0'));
         if(!empty($type)){
             if($type == 'riwayat'){
                 $this->db->where(array('r.user_id' => $this->sessionid));
@@ -228,6 +229,7 @@ class Home extends KZ_Controller {
         $content = '';
         foreach ($get->result_array() as $item) {
             $liked = $this->db->get_where('fk_like', array('video_id' => $item['id_video'], 'status_like' => '1'))->num_rows();
+            $comment = $this->db->get_where('m_komen', array('video_id' => $item['id_video'], 'status_komen' => '1'))->num_rows();
             $rand = (int) random_string('numeric',2);
             $progress = ($type == 'riwayat') ? '<div class="progress"><div class="progress-bar" role="progressbar" style="width: '.$rand.'%;">'.$rand.' %</div></div>' : '';
             
@@ -238,14 +240,16 @@ class Home extends KZ_Controller {
                     <div class="video-card-image">
                         <a class="play-icon" href="'.site_url('video/'.$item['slug_video']).'"><i class="fas fa-play-circle"></i></a>
                         <a href="'.site_url('video/'.$item['slug_video']).'"><img class="img-fluid" src="'. load_file($item['img_video']).'"></a>
-                        <div class="time">'.$liked.' <i class="fa fa-thumbs-up"></i></div>
+                        <div class="time">
+                            '.$liked.' <i class="fa fa-thumbs-up"></i>  '.$comment.' <i class="fa fa-comment"></i>
+                        </div>
                     </div>
                     '.$progress.'
                     <div class="video-card-body">
                         <div class="video-title"><a href="'.site_url('video/'.$item['slug_video']).'">'.$item['judul_video'].'</a></div>
                         <div class="video-page text-success">'.$item['judul_topik'].'</div>
                         <div class="video-view">
-                            '.$item['viewed'].' Views &nbsp;<i class="fas fa-calendar-alt"></i> '.selisih_wkt($item['create_video']).'
+                            '.$item['viewed'].' Views &nbsp;<i class="fas fa-clock"></i> '.selisih_wkt($item['create_video']).'
                         </div>
                 </div></div></div>';
         }

@@ -68,12 +68,16 @@ class Video extends KZ_Controller {
         if($routing_module['type'] == 'list') {
             if($routing_module['source'] == 'info') {
                 $this->_get_info();
+            }else if($routing_module['source'] == 'komentar') {
+                $this->_get_komentar();
             }
         }else if($routing_module['type'] == 'action') {
             if($routing_module['source'] == 'upload') {
                 $this->_upload_video();
             }else if($routing_module['source'] == 'liked') {
                 $this->_liked_video();
+            }else if($routing_module['source'] == 'komentar') {
+                $this->_komentar_video();
             }
         }
     }
@@ -108,6 +112,43 @@ class Video extends KZ_Controller {
         $data['viewed'] = $this->db->get_where('fk_riwayat',array('video_id' => decode($id)))->num_rows();
         
         jsonResponse(array('data' => $data, 'status' => true, 'msg' => 'Data ditemukan'));
+    }
+    function _get_komentar() {
+        $id = $this->input->post('id');
+        $sort = $this->input->post('sort');
+        
+        $this->db->select('*')->from('m_komen k')
+            ->join('m_creator c', 'c.user_id = k.user_id', 'left')
+            ->where(array('k.video_id' => decode($id), 'k.status_komen' => '1'));
+        if($sort == 'baru'){
+            $this->db->order_by('k.create_komen', 'desc');
+        }else{
+            $this->db->order_by('k.create_komen', 'asc');
+        }
+        $get = $this->db->get();
+        
+        if($get->num_rows() < 1){
+            jsonResponse(array('status' => false, 'msg' => 'Data tidak ditemukan'));
+        }
+        $content = '';
+        foreach ($get->result_array() as $item) {
+            
+            $content .= '<div class="col-md-12 komentar-item">
+                <div class="video-card video-card-list">
+                    <div class="single-video-author">
+                        <a href="'.site_url('channel/'.$item['slug_creator']).'">
+                            <img class="img-fluid" src="'. load_file($item['img_creator']).'">
+                        </a>
+                    </div>
+                    <div class="video-card-body">
+                        <div class="video-title">
+                            <a href="'.site_url('channel/'.$item['slug_creator']).'">'.$item['nama_creator'].'</a>
+                            <small style="font-size:9px">'.selisih_wkt($item['create_komen']).'</small>
+                        </div>
+                        <div class="video-page" style="font-size:13px">'.$item['isi_komen'].'</div>
+                </div></div></br></div>';
+        }
+        jsonResponse(array('data' => $content, 'count' => $get->num_rows(), 'status' => true, 'msg' => 'Data ditemukan'));
     }
     function _liked_video() {
         $status = $this->input->post('status');
@@ -186,13 +227,38 @@ class Video extends KZ_Controller {
         }
         $data['file_video']  = $this->path.'/video/' . $this->upload->data('file_name');
         //insert db
-        $this->db->set('id_video', 'UUID()', FALSE);
-        $this->db->insert('m_video', $data);
-        if($this->db->affected_rows() > 0){
+        $this->db->set('id_video', 'UUID()', FALSE)->insert('m_video', $data);
+        $insert = $this->db->affected_rows();
+        if($insert > 0){
             jsonResponse(array('status' => true, 'msg' => 'Video telah berhasil di upload!'));
         }else{
             delete_file($thumb);delete_file($data['file_video']);
             jsonResponse(array('status' => false, 'msg' => 'Video gagal di upload!'));
+        }
+    }
+    function _komentar_video() {
+        if(!$this->_validation($this->rules_komentar, 1)){
+            jsonResponse(array('status' => false, 'msg' => '<h4>Peringatan</h4>'.validation_errors()));
+        }
+        $data['video_id'] = decode($this->input->post('id'));
+        $data['user_id'] = $this->sessionid;
+        $data['isi_komen'] = $this->input->post('komentar');
+        $data['status_komen'] = '1';
+        $data['create_komen'] = date('Y-m-d H:i:s');
+        
+        $check = $this->db->get_where('m_komen', array('video_id' => $data['video_id'], 
+            'user_id' => $data['user_id'], 'DATE(create_komen)' => date('Y-m-d'))
+        );
+        if($check->num_rows() > 0){
+            jsonResponse(array('status' => false, 'msg' => '<h4>Peringatan</h4>Hari ini anda sudah memberikan komentar. Silahkan berkomentar lain hari'));
+        }
+        //insert db
+        $this->db->set('id_komen', 'UUID()', FALSE)->insert('m_komen', $data);
+        $insert = $this->db->affected_rows();
+        if($insert > 0){
+            jsonResponse(array('status' => true, 'msg' => 'Komentar berhasil dikirim'));
+        }else{
+            jsonResponse(array('status' => false, 'msg' => '<h4>Peringatan</h4>Gagal memberi komentar. Mohon ulangi kembali'));
         }
     }
     private $rules = array(
@@ -220,6 +286,17 @@ class Video extends KZ_Controller {
             'field' => 'tag',
             'label' => 'Tag Video',
             'rules' => 'trim|xss_clean|min_length[5]'
+        )
+    );
+    private $rules_komentar = array(
+        array(
+            'field' => 'id',
+            'label' => 'Video',
+            'rules' => 'required|trim|xss_clean'
+        ),array(
+            'field' => 'komentar',
+            'label' => 'Komentar Video',
+            'rules' => 'required|trim|xss_clean|min_length[5]'
         )
     );
 }

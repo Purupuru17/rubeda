@@ -30,13 +30,13 @@
                         <h6>Batasan Usia :</h6>
                         <p><?= array_find($detail['usia_video'], load_array('st_usia')) ?></p>-->
                         
-                        <h6>Topik :</h6>
+                        <h6>Topik</h6>
                         <p><?= $detail['judul_topik'] ?></p>
                         
-                        <h6>Deskripsi :</h6>
+                        <h6>Deskripsi</h6>
                         <p><?= ctk($detail['deskripsi_video']) ?></p>
                         
-                        <h6>Tags :</h6>
+                        <h6>Tags</h6>
                         <p class="tags mb-0">
                             <?php
                             $tag_arr = explode(',', $detail['tag_video'] ?? '');
@@ -45,6 +45,35 @@
                             }
                             ?>
                         </p>
+                    </div>
+                    <div class="single-video-info-content box mb-3">
+                        <div class="single-video-right" style="overflow-y: auto; max-height: 600px; overflow-x: hidden">
+                            <div class="row">
+                                <div id="komentar-item" class="col-md-12">
+                                    <div class="main-title">
+                                        <div class="btn-group float-right right-action">
+                                            <a href="#" class="right-action-link text-gray" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                Sort by <i class="fa fa-caret-down" aria-hidden="true"></i>
+                                            </a>
+                                            <div class="dropdown-menu dropdown-menu-right">
+                                                <a id="komentar-sort" itemid="lama" class="dropdown-item"><i class="fas fa-fw fa-signal"></i> &nbsp; Teratas</a>
+                                                <a id="komentar-sort" itemid="baru" class="dropdown-item"><i class="fas fa-fw fa-clock"></i> &nbsp; Terbaru</a>
+                                            </div>
+                                        </div>
+                                        <h6><span id="txt-komentar"></span> Komentar</h6>
+                                        <form id="komentar-form" method="POST">
+                                            <div class="form-group">
+                                               <textarea required="" rows="4" id="input-komentar" placeholder="Tambahkan komentar..." class="form-control"></textarea>
+                                            </div>
+                                            <div class="form-group text-right">
+                                                <button class="btn btn-sm btn-outline-primary" type="submit">Kirim</button>
+                                            </div>
+                                       </form>
+                                        <hr>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -85,9 +114,13 @@
     $(function () {
         get_info();
         get_video();
+        get_komentar();
     });
     $(document.body).on("click", "#video-sort", function(event) {
         get_video($(this).attr("itemid"));
+    });
+    $(document.body).on("click", "#komentar-sort", function(event) {
+        get_komentar($(this).attr("itemid"));
     });
     $(document.body).on("click", "#subs-btn", function(event) {
         subs_channel($(this).attr("itemid"), $(this).attr("itemprop"));
@@ -127,6 +160,24 @@
                 $(".video-item").remove();
                 if(rs.status) {
                     $(rs.data).insertAfter("#video-item");
+                }
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                console.log('Failed fetch data from server');
+            }
+        });
+    }
+    function get_komentar(sort = null) {
+        $.ajax({
+            url: module + "/ajax/type/list/source/komentar",
+            type: "POST",
+            dataType: "json",
+            data: { sort: sort, id: $("#id").val() },
+            success: function (rs) {
+                $(".komentar-item").remove();
+                if(rs.status) {
+                    $(rs.data).insertAfter("#komentar-item");
+                    $("#txt-komentar").html(rs.count);
                 }
             },
             error: function (xhr, ajaxOptions, thrownError) {
@@ -179,4 +230,28 @@
             }
         });
     }
+    $("#komentar-form").on('submit', function (e) {
+        e.preventDefault();
+        $.ajax({
+            url: module + "/ajax/type/action/source/komentar",
+            dataType: "json",
+            type: "POST",
+            data: {
+                id: $("#id").val(),
+                komentar: $("#input-komentar").val()
+            },
+            success: function (rs) {
+                if (rs.status) {
+                    bootbox.alert({ message: rs.msg, backdrop: true });
+                    get_komentar();
+                    $("#input-komentar").val('');
+                } else {
+                    bootbox.alert({ message: rs.msg, backdrop: true });
+                }
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                console.log('Failed fetch data from server');
+            }
+        });
+    });
 </script>
